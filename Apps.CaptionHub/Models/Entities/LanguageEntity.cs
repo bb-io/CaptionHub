@@ -16,8 +16,8 @@ public class LanguageEntity
     public string TerritoryAndCode { get; set; }
     
     [Display("Auto align available")]
-    public string AutoAlignAvailable { get; set; }
+    public bool? AutoAlignAvailable { get; set; }
     
     [Display("Auto transcribe available")]
-    public string AutoTranscribeAvailable { get; set; }
+    public bool? AutoTranscribeAvailable { get; set; }
 }

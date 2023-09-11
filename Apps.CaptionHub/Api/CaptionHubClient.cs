@@ -1,22 +1,16 @@
-﻿using Apps.CaptionHub.Constants;
+﻿using System.Web;
+using Apps.CaptionHub.Constants;
 using Apps.CaptionHub.Models.Response;
 using Blackbird.Applications.Sdk.Utils.Extensions.String;
 using Blackbird.Applications.Sdk.Utils.RestSharp;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Serialization;
 using RestSharp;
 
 namespace Apps.CaptionHub.Api;
 
 public class CaptionHubClient : BlackBirdRestClient
 {
-    protected override JsonSerializerSettings? JsonSettings => new()
-    {
-        ContractResolver = new DefaultContractResolver()
-        {
-            NamingStrategy = new SnakeCaseNamingStrategy()
-        }
-    };
+    protected override JsonSerializerSettings? JsonSettings => JsonConfig.Settings;
 
     public CaptionHubClient() : base(new()
     {
@@ -27,7 +21,28 @@ public class CaptionHubClient : BlackBirdRestClient
 
     protected override Exception ConfigureErrorException(RestResponse response)
     {
-        var error = JsonConvert.DeserializeObject<ErrorResponse>(response.Content);
+        var responseContent = HttpUtility.HtmlDecode(response.Content);
+        var error = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
+        
         return new(error.Error);
+    }
+
+    public async Task<List<T>> Paginate<T>(CaptionHubRequest request)
+    {
+        var result = new List<T>();
+        var url = request.Resource;
+
+        var page = 1;
+        T[] response;
+
+        do
+        {
+            request.Resource = url.SetQueryParameter("page", (page++).ToString());
+            response = await ExecuteWithErrorHandling<T[]>(request);
+            
+            result.AddRange(response);
+        } while (response.Any());
+
+        return result;
     }
 }
