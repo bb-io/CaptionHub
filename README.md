@@ -4,6 +4,8 @@ Blackbird is the new automation backbone for the language technology industry. B
 
 ## Introduction
 
+<!-- begin docs -->
+
 CaptionHub is a cloud-based platform that provided services related to video captioning and subtitling. This CaptionHub application primarily centers around project and caption set management.
 
 ## Connecting
@@ -21,7 +23,7 @@ CaptionHub is a cloud-based platform that provided services related to video cap
 
 ### Activities
 
--   **List activities** returns a list of all activities for a `Team`, `Project` or `Caption set`.
+- **List activities** returns a list of all activities for a `Team`, `Project` or `Caption set`.
 
 ### Automations
 
@@ -68,14 +70,15 @@ CaptionHub is a cloud-based platform that provided services related to video cap
 
 - **List workflow transitions** returns a list of all workflow transitions for a team, project or caption set.
 
-
 ## Missing features
 
 In the future we can add actions for:
 
--   Custom dictionaries
--   Team workflows
+- Custom dictionaries
+- Team workflows
 
 ## Feedback
 
 Feedback to our implementation of CaptionHub is always very welcome. Reach out to us using the established channels or create an issue.
+
+<!-- end docs -->
