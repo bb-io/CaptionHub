@@ -23,8 +23,11 @@ public class CaptionHubClient : BlackBirdRestClient
     {
         var responseContent = HttpUtility.HtmlDecode(response.Content);
         var error = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
-        
-        return new(error.Error);
+
+        var errorMessage = error.Error.Contains("Server error")
+            ? "Something went wrong, you should check your inputs"
+            : error.Error;
+        return new(errorMessage);
     }
 
     public async Task<List<T>> Paginate<T>(CaptionHubRequest request)
@@ -39,7 +42,7 @@ public class CaptionHubClient : BlackBirdRestClient
         {
             request.Resource = url.SetQueryParameter("page", (page++).ToString());
             response = await ExecuteWithErrorHandling<T[]>(request);
-            
+
             result.AddRange(response);
         } while (response.Any());
 
