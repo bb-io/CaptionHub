@@ -1,5 +1,4 @@
-﻿using System.Net.Mime;
-using Apps.CaptionHub.Api;
+﻿using Apps.CaptionHub.Api;
 using Apps.CaptionHub.Constants;
 using Apps.CaptionHub.Invocables;
 using Apps.CaptionHub.Models.Entities;
@@ -8,7 +7,6 @@ using Apps.CaptionHub.Models.Request.Render;
 using Apps.CaptionHub.Models.Response;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
-using Blackbird.Applications.Sdk.Common.Files;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Utils.Utilities;
 using RestSharp;
