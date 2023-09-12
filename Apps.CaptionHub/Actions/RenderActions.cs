@@ -8,7 +8,9 @@ using Apps.CaptionHub.Models.Request.Render;
 using Apps.CaptionHub.Models.Response;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
+using Blackbird.Applications.Sdk.Common.Files;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using Blackbird.Applications.Sdk.Utils.Utilities;
 using RestSharp;
 
 namespace Apps.CaptionHub.Actions;
@@ -50,15 +52,13 @@ public class RenderActions : CaptionHubInvocable
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds);
 
         var url = await Client.ExecuteWithErrorHandling<DownloadLinkEntity>(request);
-        var file = await Client.ExecuteAsync(new(url.DownloadUrl));
+
+        var file = await FileDownloader.DownloadFileBytes(url.DownloadUrl);
+        file.Name = $"{input.CaptionSetId}-{input.RenderId}";
 
         return new()
         {
-            File = new(file.RawBytes)
-            {
-                Name = $"{input.CaptionSetId}-{input.RenderId}",
-                ContentType = MediaTypeNames.Application.Octet
-            }
+            File = file
         };
     }
 }
