@@ -9,8 +9,7 @@ public class UserRoleDataHandler : EnumDataHandler
         { "linguist", "Linguist" },
         { "reviewer", "Reviewer" },
         { "producer", "Producer" },
-        // TODO: check if role works
-        { "language supervisor", "Language supervisor" },
+        { "language_supervisor", "Language supervisor" },
         { "superuser", "Superuser" },
     };
 }

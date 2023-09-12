@@ -50,7 +50,6 @@ public class CreateProjectRequest
     [Display("Override framerate")]
     [JsonProperty("override_framerate")]
     [DataSource(typeof(OverrideFramerateDataHandler))]
-    //todo: add string to float converter
     public string? OverrideFramerate { get; set; }
 
     [Display("Automation ID")]

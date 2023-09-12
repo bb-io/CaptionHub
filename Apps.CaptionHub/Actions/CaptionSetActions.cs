@@ -73,7 +73,6 @@ public class CaptionSetActions : CaptionHubInvocable
         return Client.ExecuteWithErrorHandling<CaptionSetEntity>(request);
     }   
     
-    // TODO: investigate server error
     [Action("Create original caption set", Description = "Create a new original caption set")]
     public Task<CaptionSetEntity> CreateOriginalCaptionSet(
         [ActionParameter] CreateOriginalCaptionSetRequest input,
@@ -92,7 +91,6 @@ public class CaptionSetActions : CaptionHubInvocable
         return Client.ExecuteWithErrorHandling<CaptionSetEntity>(request);
     }    
     
-    // TODO: investigate server error
     [Action("Download original captions", Description = "Download an original caption set in the requested format")]
     public async Task<FileResponse> DownloadOriginalCaptions(
         [ActionParameter] DownloadOriginalCaptionSetRequest input)
@@ -111,7 +109,6 @@ public class CaptionSetActions : CaptionHubInvocable
         };
     }    
     
-    // TODO: test
     [Action("Download translated captions", Description = "Download a translated caption set in the requested format")]
     public async Task<FileResponse> DownloadTranslatedCaptions(
         [ActionParameter] DownloadTranslatedCaptionSetRequest input)
