@@ -49,8 +49,8 @@ public class ProjectEntity
     [Display("Timecode start")]
     public string TimecodeStartString { get; set; }
 
-    [Display("Original Caption Set")]
-    public CaptionSetEntity OriginalCaptionSet { get; set; }
+    // [Display("Original Caption Set")]
+    // public CaptionSetEntity OriginalCaptionSet { get; set; }
 
     [Display("Caption Sets")]
     public CaptionSetEntity[] CaptionSets { get; set; }

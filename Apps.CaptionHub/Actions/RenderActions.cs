@@ -52,7 +52,7 @@ public class RenderActions : CaptionHubInvocable
         var url = await Client.ExecuteWithErrorHandling<DownloadLinkEntity>(request);
 
         var file = await FileDownloader.DownloadFileBytes(url.DownloadUrl);
-        file.Name = $"{input.CaptionSetId}-{input.RenderId}";
+        file.Name = $"{input.CaptionSetId}-{input.RenderId}.mp4";
 
         return new()
         {

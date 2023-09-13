@@ -10,10 +10,6 @@ public class CreateProjectRequest
 {
     [JsonProperty("name")] public string Name { get; set; }
 
-    [Display("Original media URL")]
-    [JsonProperty("original_media_url")]
-    public string OriginalMediaUrl { get; set; }
-
     [Display("Video title")]
     [JsonProperty("video_title")]
     public string? VideoTitle { get; set; }

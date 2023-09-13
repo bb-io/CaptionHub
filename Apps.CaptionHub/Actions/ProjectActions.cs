@@ -17,12 +17,19 @@ public class ProjectActions : CaptionHubInvocable
     public ProjectActions(InvocationContext invocationContext) : base(invocationContext)
     {
     }
-    
+
     [Action("Create project", Description = "Create a new project")]
-    public Task<ProjectEntity> CreateProject([ActionParameter] CreateProjectRequest input)
+    public Task<ProjectEntity> CreateProject([ActionParameter] CreateProjectRequest input,
+        [ActionParameter] FilesRequest files)
     {
         var request = new CaptionHubRequest(ApiEndpoints.Projects, Method.Post, Creds)
             .WithFormData(input, true, ignoreNullValues: true);
+
+        if (files.OriginalMediaUrl is not null)
+            request.AddParameter("original_media_url", files.OriginalMediaUrl.DownloadUrl);
+        
+        if(files.OriginalMedia is not null)
+            request.WithFile(files.OriginalMedia.Bytes, files.OriginalMedia.Name, "original_media");
 
         return Client.ExecuteWithErrorHandling<ProjectEntity>(request);
     }        

@@ -22,7 +22,7 @@ public class CaptionSetActions : CaptionHubInvocable
     public CaptionSetActions(InvocationContext invocationContext) : base(invocationContext)
     {
     }
-    
+
     [Action("List caption sets", Description = "List caption sets assigned to a user")]
     public async Task<ListCaptionSetsResponse> ListCaptionSets(
         [ActionParameter] [Display("Email")] string email)
@@ -30,11 +30,11 @@ public class CaptionSetActions : CaptionHubInvocable
         var endpoint = $"{ApiEndpoints.CaptionSets}/assigned_to_user"
             .SetQueryParameter("email", email);
         var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
-        
+
         var response = await Client.ExecuteWithErrorHandling<SimpleCaptionSetEntity[]>(request);
         return new(response);
-    }    
-    
+    }
+
     [Action("Approve caption set", Description = "Mark all segments in a caption set as approved")]
     public Task ApproveCaptionSet([ActionParameter] CaptionSetRequest input)
     {
@@ -42,8 +42,8 @@ public class CaptionSetActions : CaptionHubInvocable
         var request = new CaptionHubRequest(endpoint, Method.Put, Creds);
 
         return Client.ExecuteWithErrorHandling(request);
-    }     
-    
+    }
+
     [Action("Make caption set reviewable", Description = "Make all segments in a caption set reviewable")]
     public Task MakeCaptionSetReviewable([ActionParameter] CaptionSetRequest input)
     {
@@ -51,8 +51,8 @@ public class CaptionSetActions : CaptionHubInvocable
         var request = new CaptionHubRequest(endpoint, Method.Put, Creds);
 
         return Client.ExecuteWithErrorHandling(request);
-    }     
-    
+    }
+
     [Action("Make caption set claimable", Description = "Make all segments in a caption set claimable")]
     public Task MakeCaptionSetClaimable([ActionParameter] CaptionSetRequest input)
     {
@@ -60,8 +60,8 @@ public class CaptionSetActions : CaptionHubInvocable
         var request = new CaptionHubRequest(endpoint, Method.Put, Creds);
 
         return Client.ExecuteWithErrorHandling(request);
-    }     
-    
+    }
+
     [Action("Create translated caption set", Description = "Create a caption set ready for translation")]
     public Task<CaptionSetEntity> CreateTranslatedCaptionSet(
         [ActionParameter] CreateTranslatedCaptionSetRequest input)
@@ -69,10 +69,10 @@ public class CaptionSetActions : CaptionHubInvocable
         var endpoint = $"{ApiEndpoints.CaptionSets}/translation";
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds)
             .WithFormData(input, true, ignoreNullValues: true);
-        
+
         return Client.ExecuteWithErrorHandling<CaptionSetEntity>(request);
-    }   
-    
+    }
+
     [Action("Create original caption set", Description = "Create a new original caption set")]
     public Task<CaptionSetEntity> CreateOriginalCaptionSet(
         [ActionParameter] CreateOriginalCaptionSetRequest input,
@@ -84,13 +84,13 @@ public class CaptionSetActions : CaptionHubInvocable
 
         if (text.TimedText is not null)
             request = request.WithFile(text.TimedText.Bytes, text.TimedText.Name, "timed_text");
-        
+
         if (text.PlainText is not null)
             request = request.WithFile(text.PlainText.Bytes, text.PlainText.Name, "plain_text");
-        
+
         return Client.ExecuteWithErrorHandling<CaptionSetEntity>(request);
-    }    
-    
+    }
+
     [Action("Download original captions", Description = "Download an original caption set in the requested format")]
     public async Task<FileResponse> DownloadOriginalCaptions(
         [ActionParameter] DownloadOriginalCaptionSetRequest input)
@@ -107,8 +107,8 @@ public class CaptionSetActions : CaptionHubInvocable
                 ContentType = MediaTypeNames.Application.Octet
             }
         };
-    }    
-    
+    }
+
     [Action("Download translated captions", Description = "Download a translated caption set in the requested format")]
     public async Task<FileResponse> DownloadTranslatedCaptions(
         [ActionParameter] DownloadTranslatedCaptionSetRequest input)
@@ -125,5 +125,20 @@ public class CaptionSetActions : CaptionHubInvocable
                 ContentType = MediaTypeNames.Application.Octet
             }
         };
+    }
+
+    [Action("Update translation", Description = "Update translation caption set from a file")]
+    public Task UpdateTranslation([ActionParameter] UpdateTranslationRequest input)
+    {
+        var endpoint = $"{ApiEndpoints.CaptionSets}/translation";
+        var request = new CaptionHubRequest(endpoint, Method.Put, Creds)
+        {
+            AlwaysMultipartFormData = true
+        }.WithFile(input.File.Bytes, input.File.Name, "timed_text");
+
+        request.AddParameter("project_id", input.ProjectId);
+        request.AddParameter("language_id", input.LanguageId);
+
+        return Client.ExecuteWithErrorHandling(request);
     }
 }
