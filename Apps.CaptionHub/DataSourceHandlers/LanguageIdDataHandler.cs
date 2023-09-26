@@ -8,9 +8,9 @@ using RestSharp;
 
 namespace Apps.CaptionHub.DataSourceHandlers;
 
-public class LanguageDataHandler : CaptionHubInvocable, IAsyncDataSourceHandler
+public class LanguageIdDataHandler : CaptionHubInvocable, IAsyncDataSourceHandler
 {
-    public LanguageDataHandler(InvocationContext invocationContext) : base(invocationContext)
+    public LanguageIdDataHandler(InvocationContext invocationContext) : base(invocationContext)
     {
     }
 

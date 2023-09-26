@@ -23,8 +23,13 @@ public class CreateOriginalCaptionSetRequest
 
     [Display("Language ID")]
     [JsonProperty("language_id")]
-    [DataSource(typeof(LanguageDataHandler))]
+    [DataSource(typeof(LanguageIdDataHandler))]
     public string? LanguageId { get; set; }
+
+    [Display("Language code")]
+    [JsonProperty("language_code")]
+    [DataSource(typeof(LanguageCodeDataHandler))]
+    public string? LanguageCode { get; set; }
 
     [Display("Maximum line count")]
     [JsonProperty("maximum_line_count")]

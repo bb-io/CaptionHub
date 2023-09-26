@@ -66,6 +66,9 @@ public class CaptionSetActions : CaptionHubInvocable
     public Task<CaptionSetEntity> CreateTranslatedCaptionSet(
         [ActionParameter] CreateTranslatedCaptionSetRequest input)
     {
+        if (input.LanguageCode is null && input.LanguageId is null)
+            throw new("You should specify one of the inputs: Language code or Language ID");
+        
         var endpoint = $"{ApiEndpoints.CaptionSets}/translation";
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds)
             .WithFormData(input, true, ignoreNullValues: true);
@@ -78,6 +81,9 @@ public class CaptionSetActions : CaptionHubInvocable
         [ActionParameter] CreateOriginalCaptionSetRequest input,
         [ActionParameter] CaptionSetTextRequest text)
     {
+        if (input.LanguageCode is null && input.LanguageId is null)
+            throw new("You should specify one of the inputs: Language code or Language ID");
+        
         var endpoint = $"{ApiEndpoints.CaptionSets}/original";
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds)
             .WithFormData(input, true, ignoreNullValues: true);
@@ -130,6 +136,9 @@ public class CaptionSetActions : CaptionHubInvocable
     [Action("Update translation", Description = "Update translation caption set from a file")]
     public Task UpdateTranslation([ActionParameter] UpdateTranslationRequest input)
     {
+        if (input.LanguageCode is null && input.LanguageId is null)
+            throw new("You should specify one of the inputs: Language code or Language ID");
+        
         var endpoint = $"{ApiEndpoints.CaptionSets}/translation";
         var request = new CaptionHubRequest(endpoint, Method.Put, Creds)
         {
