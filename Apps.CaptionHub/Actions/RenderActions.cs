@@ -21,21 +21,43 @@ public class RenderActions : CaptionHubInvocable
     }
 
     [Action("Get render status", Description = "Get status of a specific render")]
-    public Task<RenderingEntity> GetRenderStatus([ActionParameter] RenderRequest input)
+    public async Task<RenderingEntity> GetRenderStatus([ActionParameter] RenderRequest input)
     {
         var endpoint = $"{ApiEndpoints.CaptionSets}/{input.CaptionSetId}/renders/{input.RenderId}/status";
         var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
 
-        return Client.ExecuteWithErrorHandling<RenderingEntity>(request);
+        try
+        {
+            return await Client.ExecuteWithErrorHandling<RenderingEntity>(request);
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message == "Bad Request")
+                throw new("Could not find a render, perhaps it has been cancelled");
+
+            throw;
+        }
     }
 
     [Action("Create render", Description = "Create a render for the the given caption set")]
-    public Task<RenderingEntity> CreateRender([ActionParameter] CaptionSetRequest input)
+    public async Task<RenderingEntity> CreateRender([ActionParameter] CaptionSetRequest input)
     {
         var endpoint = $"{ApiEndpoints.CaptionSets}/{input.CaptionSetId}/renders";
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds);
 
-        return Client.ExecuteWithErrorHandling<RenderingEntity>(request);
+        var result = await Client.ExecuteWithErrorHandling<RenderingEntity>(request);
+
+        while (result.Status == "rendering" || result.Status == "queued")
+        {
+            await Task.Delay(1000);
+            result = await GetRenderStatus(new()
+            {
+                RenderId = result.Id,
+                CaptionSetId = input.CaptionSetId
+            });
+        }
+
+        return result;
     }
 
     [Action("Download render", Description = "Download completed render")]
