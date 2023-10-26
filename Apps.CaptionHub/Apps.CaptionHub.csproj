@@ -4,11 +4,15 @@
         <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <Product>Blackbird CaptionHub</Product>
+        <Description>Collaborative captioning and subtitling tool</Description>
+        <Version>1.0.0</Version>
+        <AssemblyName>Apps.CaptionHub</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.2.0-alpha3" />
-      <PackageReference Include="Blackbird.Applications.Sdk.Utils" Version="1.0.10" />
+        <PackageReference Include="Blackbird.Applications.Sdk.Common" Version="2.2.0-alpha3"/>
+        <PackageReference Include="Blackbird.Applications.Sdk.Utils" Version="1.0.10"/>
     </ItemGroup>
 
 </Project>
