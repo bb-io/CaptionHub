@@ -1,5 +1,6 @@
 ﻿using Apps.CaptionHub.Constants;
 using Blackbird.Applications.Sdk.Common.Authentication;
+using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
 using Blackbird.Applications.Sdk.Utils.Extensions.String;
 using Blackbird.Applications.Sdk.Utils.Webhooks.Bridge;
@@ -7,11 +8,15 @@ using Blackbird.Applications.Sdk.Utils.Webhooks.Bridge.Models.Request;
 
 namespace Apps.CaptionHub.Webhooks.Handlers.Base;
 
-public abstract class CaptionHubWebhookHandler : BridgeWebhookHandler
+public abstract class CaptionHubWebhookHandler : InvocableBridgeWebhookHandler
 {
     protected abstract string Event { get; }
-    
-    protected override (BridgeRequest webhookData, BridgeCredentials bridgeCreds) GetBridgeServiceInputs(
+
+    protected CaptionHubWebhookHandler(InvocationContext invocationContext) : base(invocationContext)
+    {
+    }
+
+    protected override Task<(BridgeRequest webhookData, BridgeCredentials bridgeCreds)> GetBridgeServiceInputs(
         Dictionary<string, string> values, IEnumerable<AuthenticationCredentialsProvider> creds)
     {
         var webhookData = new BridgeRequest
@@ -23,10 +28,10 @@ public abstract class CaptionHubWebhookHandler : BridgeWebhookHandler
 
         var bridgeCreds = new BridgeCredentials
         {
-            ServiceUrl = ApplicationConstants.BridgeServiceUrl,
+            ServiceUrl = InvocationContext.UriInfo.BridgeServiceUrl.ToString(),
             Token = ApplicationConstants.BlackbirdToken
         };
 
-        return (webhookData, bridgeCreds);
+        return Task.FromResult((webhookData, bridgeCreds));
     }
 }

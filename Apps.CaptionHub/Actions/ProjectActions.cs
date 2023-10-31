@@ -28,7 +28,7 @@ public class ProjectActions : CaptionHubInvocable
         {
             var id = Creds.Get(CredsNames.ApiKey).Value.Hash();
             input.StatusCallbackUrl =
-                ApplicationConstants.BridgeServiceUrl.SetQueryParameter("id", id);
+                InvocationContext.UriInfo.BridgeServiceUrl.ToString().SetQueryParameter("id", id);
         }
 
         var request = new CaptionHubRequest(ApiEndpoints.Projects, Method.Post, Creds)
