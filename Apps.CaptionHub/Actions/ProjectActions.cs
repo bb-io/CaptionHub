@@ -74,7 +74,7 @@ public class ProjectActions : CaptionHubInvocable
         return Client.ExecuteWithErrorHandling<ProjectEntity>(request);
     }
 
-    [Action("Wait until project has original caption set", Description = "Wait until an action set is present on a project. Use in conjunction with CaptionHub automations.")]
+    [Action("Wait until project has original caption set", Description = "Wait until a caption set is present on a project. Use in conjunction with CaptionHub automations.")]
     public async void WaitUntilCaptionSet([ActionParameter] ProjectRequest project)
     {
         var endpoint = $"{ApiEndpoints.Projects}/{project.ProjectId}";
