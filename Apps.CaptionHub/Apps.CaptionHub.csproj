@@ -1,20 +1,17 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
-        <Product>CaptionHub</Product>
-        <Description>Collaborative captioning and subtitling tool</Description>
-        <Version>1.1.0</Version>
-        <AssemblyName>Apps.CaptionHub</AssemblyName>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <EmbeddedResource CopyToOutputDirectory="Always" Include="image\icon.png"/>
-    </ItemGroup>
-
-    <ItemGroup>
-      <PackageReference Include="Blackbird.Applications.Sdk.Utils" Version="1.0.13" />
-    </ItemGroup>
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Product>CaptionHub</Product>
+    <Description>Collaborative captioning and subtitling tool</Description>
+    <Version>1.1.1</Version>
+    <AssemblyName>Apps.CaptionHub</AssemblyName>
+  </PropertyGroup>
+  <ItemGroup>
+    <EmbeddedResource CopyToOutputDirectory="Always" Include="image\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Blackbird.Applications.Sdk.Utils" Version="1.0.13" />
+  </ItemGroup>
 </Project>
