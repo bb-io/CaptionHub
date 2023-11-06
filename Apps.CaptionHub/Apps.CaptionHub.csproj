@@ -6,7 +6,7 @@
         <Nullable>enable</Nullable>
         <Product>CaptionHub</Product>
         <Description>Collaborative captioning and subtitling tool</Description>
-        <Version>1.0.1</Version>
+        <Version>1.1.0</Version>
         <AssemblyName>Apps.CaptionHub</AssemblyName>
     </PropertyGroup>
 
