@@ -7,8 +7,9 @@ namespace Apps.CaptionHub.Models.Request.CaptionSet;
 
 public class CreateTranslatedCaptionSetRequest
 {
-    [Display("Project ID")]
+    [Display("Project")]
     [JsonProperty("project_id")]
+    [DataSource(typeof(ProjectDataHandler))]
     public string ProjectId { get; set; }
     
     [Display("Language ID")]

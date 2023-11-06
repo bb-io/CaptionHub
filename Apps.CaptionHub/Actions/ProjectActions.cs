@@ -3,6 +3,7 @@ using Apps.CaptionHub.Constants;
 using Apps.CaptionHub.Invocables;
 using Apps.CaptionHub.Models.Entities;
 using Apps.CaptionHub.Models.Request.Project;
+using Apps.CaptionHub.Models.Response.Project;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Invocation;
@@ -20,6 +21,15 @@ public class ProjectActions : CaptionHubInvocable
     {
     }
 
+    [Action("List projects", Description = "List all projects")]
+    public async Task<ListProjectsResponse> ListProjects()
+    {
+        var request = new CaptionHubRequest(ApiEndpoints.Projects, Method.Get, Creds);
+        
+        var response = await Client.Paginate<ProjectEntity>(request);
+        return new(response);
+    }
+    
     [Action("Create project", Description = "Create a new project")]
     public Task<ProjectEntity> CreateProject([ActionParameter] CreateProjectRequest input,
         [ActionParameter] FilesRequest files)
