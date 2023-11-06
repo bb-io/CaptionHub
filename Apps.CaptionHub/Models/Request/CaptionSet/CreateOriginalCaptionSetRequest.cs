@@ -10,6 +10,7 @@ public class CreateOriginalCaptionSetRequest
 {
     [Display("Project ID")]
     [JsonProperty("project_id")]
+    [DataSource(typeof(ProjectDataHandler))]
     public string ProjectId { get; set; }
 
     [Display("User transcription")]

@@ -1,4 +1,6 @@
-﻿using Blackbird.Applications.Sdk.Common;
+﻿using Apps.CaptionHub.DataSourceHandlers;
+using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Dynamic;
 using Newtonsoft.Json;
 
 namespace Apps.CaptionHub.Models.Request.Workflow;
@@ -19,5 +21,6 @@ public class ListWorkflowTransitionsRequest
 
     [JsonProperty("project_id")] 
     [Display("Project ID")]
+    [DataSource(typeof(ProjectDataHandler))]
     public string? ProjectId { get; set; }
 }
