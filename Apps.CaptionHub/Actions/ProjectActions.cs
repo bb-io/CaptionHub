@@ -82,7 +82,7 @@ public class ProjectActions : CaptionHubInvocable
     
         ProjectResponse? result = null;
     
-        while (result?.OriginalCaptionSet == null)
+        while (result?.OriginalCaptionSet?.PercentageComplete != "100")
         {
             await Task.Delay(3000);
             result = await Client.ExecuteWithErrorHandling<ProjectResponse>(request);
