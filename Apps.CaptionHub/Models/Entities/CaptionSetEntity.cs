@@ -14,7 +14,7 @@ public class CaptionSetEntity
     public string TranslatedSpeakerId { get; set; }
 
     [Display("Percentage complete")]
-    public string PercentageComplete { get; set; }
+    public double PercentageComplete { get; set; }
 
     [Display("Maximum line count")]
     public int MaximumLineCount { get; set; }
