@@ -79,16 +79,16 @@ public class ProjectActions : CaptionHubInvocable
     {
         var endpoint = $"{ApiEndpoints.Projects}/{project.ProjectId}";
         var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
-
-        ProjectEntity? result = null;
-
+    
+        ProjectResponse? result = null;
+    
         while (result?.OriginalCaptionSet == null)
         {
             await Task.Delay(3000);
-            result = await Client.ExecuteWithErrorHandling<ProjectEntity>(request);
+            result = await Client.ExecuteWithErrorHandling<ProjectResponse>(request);
         }
-
-        return result;
+    
+        return new(result);
     }
 
     [Action("Delete project", Description = "Delete specific project")]
