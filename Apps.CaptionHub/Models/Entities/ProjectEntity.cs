@@ -49,12 +49,12 @@ public class ProjectEntity
     [Display("Timecode start")]
     public string TimecodeStartString { get; set; }
 
-    [Display("Original Caption Set")]
+    [Display("Original caption set")]
     public CaptionSetEntity? OriginalCaptionSet { get; set; }
 
-    [Display("Caption Sets")]
+    [Display("Caption sets")]
     public CaptionSetEntity[] CaptionSets { get; set; }
 
-    [Display("Word Count")]
+    [Display("Word count")]
     public string WordCount { get; set; }
 }
