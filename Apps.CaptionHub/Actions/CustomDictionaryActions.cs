@@ -42,16 +42,17 @@ public class CustomDictionaryActions : CaptionHubInvocable
         return new(response);
     }
 
-    [Action("Activate custom dictionary",
-        Description = "Get the status of a custom dictionary on the supplied provider")]
-    public Task<ActivateCustomDictionaryResponse> ActivateCustomDictionary()
-    {
-        var request = new CaptionHubRequest("/custom_dictionary_activations", Method.Post, Creds)
-            .WithJsonBody(new
-            {
-                custom_dictionary_id = "601",
-                providers = new[] { "aws" }
-            });
-        return Client.ExecuteWithErrorHandling<ActivateCustomDictionaryResponse>(request);
-    }
+    //TODO: Find out cause of "Server error" exception
+    // [Action("Activate custom dictionary",
+    //     Description = "Get the status of a custom dictionary on the supplied provider")]
+    // public Task<ActivateCustomDictionaryResponse> ActivateCustomDictionary()
+    // {
+    //     var request = new CaptionHubRequest("/custom_dictionary_activations", Method.Post, Creds)
+    //         .WithJsonBody(new
+    //         {
+    //             custom_dictionary_id = "601",
+    //             providers = new[] { "aws" }
+    //         });
+    //     return Client.ExecuteWithErrorHandling<ActivateCustomDictionaryResponse>(request);
+    // }
 }
