@@ -12,4 +12,5 @@ public static class ApiEndpoints
     public const string Termbases = "/termbases";
     public const string Users = "/users";
     public const string WorkflowTransitions = "/workflow_transitions";
+    public const string CustomDictionary = "/custom_dictionaries";
 }
