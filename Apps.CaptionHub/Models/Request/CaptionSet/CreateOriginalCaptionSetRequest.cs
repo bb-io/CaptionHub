@@ -17,6 +17,11 @@ public class CreateOriginalCaptionSetRequest
     [JsonProperty("transcription")]
     public bool? Transcription { get; set; }
 
+    [Display("Transcription provider")]
+    [JsonProperty("transcription_provider")]
+    [DataSource(typeof(TranscriptionProviderDataHandler))]
+    public string? TranscriptionProvider { get; set; }
+
     [Display("Split text file on")]
     [JsonProperty("split_text_file_on")]
     [DataSource(typeof(SplitTextFileOnHandler))]
