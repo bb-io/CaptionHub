@@ -78,8 +78,6 @@ public class RenderActions : CaptionHubInvocable
 
         var url = await Client.ExecuteWithErrorHandling<DownloadLinkEntity>(request);
 
-        var file = await FileDownloader.DownloadFileBytes(url.DownloadUrl);
-
         return new()
         {
             File = new(new(HttpMethod.Get, url.DownloadUrl))
