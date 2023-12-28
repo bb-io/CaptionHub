@@ -42,13 +42,8 @@ public class ProjectActions : CaptionHubInvocable
         }
 
         var request = new CaptionHubRequest(ApiEndpoints.Projects, Method.Post, Creds)
-            .WithFormData(input, true, ignoreNullValues: true);
-
-        if (files.OriginalMediaUrl is not null)
-            request.AddParameter("original_media_url", files.OriginalMediaUrl.DownloadUrl);
-
-        if (files.OriginalMedia is not null)
-            request.WithFile(files.OriginalMedia.Bytes, files.OriginalMedia.Name, "original_media");
+            .WithFormData(input, true, ignoreNullValues: true)
+            .AddParameter("original_media_url", (files.OriginalMedia?.Url ?? files.OriginalMediaUrl) ?? string.Empty);
 
         return Client.ExecuteWithErrorHandling<ProjectEntity>(request);
     }

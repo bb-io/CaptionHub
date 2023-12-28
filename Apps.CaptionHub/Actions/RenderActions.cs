@@ -8,6 +8,7 @@ using Apps.CaptionHub.Models.Response;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using Blackbird.Applications.Sdk.Utils.Utilities;
 using RestSharp;
 
@@ -16,8 +17,12 @@ namespace Apps.CaptionHub.Actions;
 [ActionList]
 public class RenderActions : CaptionHubInvocable
 {
-    public RenderActions(InvocationContext invocationContext) : base(invocationContext)
+    private readonly IFileManagementClient _fileManagementClient;
+
+    public RenderActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : base(
+        invocationContext)
     {
+        _fileManagementClient = fileManagementClient;
     }
 
     [Action("Get render status", Description = "Get status of a specific render")]
@@ -72,10 +77,8 @@ public class RenderActions : CaptionHubInvocable
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds);
 
         var url = await Client.ExecuteWithErrorHandling<DownloadLinkEntity>(request);
-
-        var file = await FileDownloader.DownloadFileBytes(url.DownloadUrl);
-        file.Name = $"{input.CaptionSetId}-{input.RenderId}.mp4";
-
+        var file = await FileDownloader.DownloadFileBytes(url.DownloadUrl, _fileManagementClient);
+        
         return new()
         {
             File = file

@@ -7,7 +7,6 @@ using Apps.CaptionHub.Models.Response.CustomDictionary;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Invocation;
-using Blackbird.Applications.Sdk.Utils.Extensions.Http;
 using RestSharp;
 
 namespace Apps.CaptionHub.Actions;
