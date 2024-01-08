@@ -10,6 +10,7 @@ using Apps.CaptionHub.Models.Response.CaptionSet;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
 using Blackbird.Applications.Sdk.Common.Invocation;
+using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using Blackbird.Applications.Sdk.Utils.Extensions.Http;
 using Blackbird.Applications.Sdk.Utils.Extensions.String;
 using RestSharp;
@@ -19,8 +20,12 @@ namespace Apps.CaptionHub.Actions;
 [ActionList]
 public class CaptionSetActions : CaptionHubInvocable
 {
-    public CaptionSetActions(InvocationContext invocationContext) : base(invocationContext)
+    private readonly IFileManagementClient _fileManagementClient;
+
+    public CaptionSetActions(InvocationContext invocationContext, IFileManagementClient fileManagementClient) : base(
+        invocationContext)
     {
+        _fileManagementClient = fileManagementClient;
     }
 
     [Action("List caption sets", Description = "List caption sets assigned to a user")]
@@ -68,7 +73,7 @@ public class CaptionSetActions : CaptionHubInvocable
     {
         if (input.LanguageCode is null && input.LanguageId is null)
             throw new("You should specify one of the inputs: Language code or Language ID");
-        
+
         var endpoint = $"{ApiEndpoints.CaptionSets}/translation";
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds)
             .WithFormData(input, true, ignoreNullValues: true);
@@ -77,24 +82,30 @@ public class CaptionSetActions : CaptionHubInvocable
     }
 
     [Action("Create original caption set", Description = "Create a new original caption set")]
-    public Task<CaptionSetEntity> CreateOriginalCaptionSet(
+    public async Task<CaptionSetEntity> CreateOriginalCaptionSet(
         [ActionParameter] CreateOriginalCaptionSetRequest input,
         [ActionParameter] CaptionSetTextRequest text)
     {
         if (input.LanguageCode is null && input.LanguageId is null)
             throw new("You should specify one of the inputs: Language code or Language ID");
-        
+
         var endpoint = $"{ApiEndpoints.CaptionSets}/original";
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds)
             .WithFormData(input, true, ignoreNullValues: true);
 
         if (text.TimedText is not null)
-            request = request.WithFile(text.TimedText.Bytes, text.TimedText.Name, "timed_text");
+        {
+            var timedTextFile = await _fileManagementClient.DownloadAsync(text.TimedText);
+            request = request.AddFile("timed_text", () => timedTextFile, text.TimedText.Name);
+        }
 
         if (text.PlainText is not null)
-            request = request.WithFile(text.PlainText.Bytes, text.PlainText.Name, "plain_text");
+        {
+            var plainTextFile = await _fileManagementClient.DownloadAsync(text.PlainText);
+            request = request.AddFile("plain_text", () => plainTextFile, text.PlainText.Name);
+        }
 
-        return Client.ExecuteWithErrorHandling<CaptionSetEntity>(request);
+        return await Client.ExecuteWithErrorHandling<CaptionSetEntity>(request);
     }
 
     [Action("Download original captions", Description = "Download an original caption set in the requested format")]
@@ -105,13 +116,12 @@ public class CaptionSetActions : CaptionHubInvocable
         var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
 
         var response = await Client.ExecuteWithErrorHandling(request);
+        var file = await _fileManagementClient.UploadAsync(new MemoryStream(response.RawBytes!),
+            MediaTypeNames.Application.Octet, $"{input.ProjectId}-original.{input.CaptionsFormat}");
+
         return new()
         {
-            File = new(response.RawBytes)
-            {
-                Name = $"{input.ProjectId}-original.{input.CaptionsFormat}",
-                ContentType = MediaTypeNames.Application.Octet
-            }
+            File = file
         };
     }
 
@@ -123,31 +133,33 @@ public class CaptionSetActions : CaptionHubInvocable
         var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
 
         var response = await Client.ExecuteWithErrorHandling(request);
+
+        var file = await _fileManagementClient.UploadAsync(new MemoryStream(response.RawBytes!),
+            MediaTypeNames.Application.Octet, $"{input.CaptionSetId}.{input.CaptionsFormat}");
+
         return new()
         {
-            File = new(response.RawBytes)
-            {
-                Name = $"{input.CaptionSetId}.{input.CaptionsFormat}",
-                ContentType = MediaTypeNames.Application.Octet
-            }
+            File = file
         };
     }
 
     [Action("Update translation", Description = "Update translation caption set from a file")]
-    public Task UpdateTranslation([ActionParameter] UpdateTranslationRequest input)
+    public async Task UpdateTranslation([ActionParameter] UpdateTranslationRequest input)
     {
         if (input.LanguageCode is null && input.LanguageId is null)
             throw new("You should specify one of the inputs: Language code or Language ID");
-        
+
+        var file = await _fileManagementClient.DownloadAsync(input.File);
+
         var endpoint = $"{ApiEndpoints.CaptionSets}/translation";
         var request = new CaptionHubRequest(endpoint, Method.Put, Creds)
         {
             AlwaysMultipartFormData = true
-        }.WithFile(input.File.Bytes, input.File.Name, "timed_text");
+        }.AddFile("timed_text", () => file, input.File.Name);
 
         request.AddParameter("project_id", input.ProjectId);
         request.AddParameter("language_id", input.LanguageId);
 
-        return Client.ExecuteWithErrorHandling(request);
+        await Client.ExecuteWithErrorHandling(request);
     }
 }
