@@ -1,6 +1,8 @@
+using Apps.CaptionHub.Webhooks.Models.Payloads.CaptionSet;
+
 namespace Apps.CaptionHub.Webhooks.Models.Responses;
 
 public class RenderingWebhookResponse : CaptionSetWebhookResponse
 {
-    public RenderingWebhookResponse Rendering { get; set; }
+    public RenderingPayload Rendering { get; set; }
 }
