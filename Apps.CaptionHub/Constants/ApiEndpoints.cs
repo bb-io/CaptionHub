@@ -13,4 +13,5 @@ public static class ApiEndpoints
     public const string Users = "/users";
     public const string WorkflowTransitions = "/workflow_transitions";
     public const string CustomDictionary = "/custom_dictionaries";
+    public const string Webhooks = "/webhooks";
 }

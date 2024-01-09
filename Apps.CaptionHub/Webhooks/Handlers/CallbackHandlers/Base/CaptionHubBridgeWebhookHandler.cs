@@ -6,13 +6,13 @@ using Blackbird.Applications.Sdk.Utils.Extensions.String;
 using Blackbird.Applications.Sdk.Utils.Webhooks.Bridge;
 using Blackbird.Applications.Sdk.Utils.Webhooks.Bridge.Models.Request;
 
-namespace Apps.CaptionHub.Webhooks.Handlers.Base;
+namespace Apps.CaptionHub.Webhooks.Handlers.CallbackHandlers.Base;
 
-public abstract class CaptionHubWebhookHandler : InvocableBridgeWebhookHandler
+public abstract class CaptionHubBridgeWebhookHandler : InvocableBridgeWebhookHandler
 {
     protected abstract string Event { get; }
 
-    protected CaptionHubWebhookHandler(InvocationContext invocationContext) : base(invocationContext)
+    protected CaptionHubBridgeWebhookHandler(InvocationContext invocationContext) : base(invocationContext)
     {
     }
 
