@@ -104,7 +104,7 @@ public class WebhookList
     public Task<WebhookResponse<ProjectWebhookResponse>> OnProjectUnarchived(WebhookRequest webhookRequest)
         => HandleWebhook<ProjectWebhookResponse>(webhookRequest);
 
-    [Webhook("On project video replaced", typeof(ProjectUnarchivedHandler),
+    [Webhook("On project video replaced", typeof(ProjectVideoReplacedHandler),
         Description = "On any project video replaced")]
     public Task<WebhookResponse<ProjectWebhookResponse>> OnProjectVideoReplaced(WebhookRequest webhookRequest)
         => HandleWebhook<ProjectWebhookResponse>(webhookRequest);
