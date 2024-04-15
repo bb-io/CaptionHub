@@ -1,10 +1,10 @@
-﻿using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
+﻿using Blackbird.Applications.Sdk.Common.Dictionaries;
 
 namespace Apps.CaptionHub.DataSourceHandlers.EnumHandleres;
 
-public class WorkflowTypeDataHandler : EnumDataHandler
+public class WorkflowTypeDataHandler : IStaticDataSourceHandler
 {
-    protected override Dictionary<string, string> EnumValues => new()
+    public Dictionary<string, string> GetData() => new()
     {
         { "assignable", "Assignable" },
         { "assignable_review", "Assignable review" },

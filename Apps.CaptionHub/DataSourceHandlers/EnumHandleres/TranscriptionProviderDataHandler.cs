@@ -1,12 +1,13 @@
-﻿using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
+﻿using Blackbird.Applications.Sdk.Common.Dictionaries;
 
 namespace Apps.CaptionHub.DataSourceHandlers.EnumHandleres;
 
-public class TranscriptionProviderDataHandler : EnumDataHandler
+public class TranscriptionProviderDataHandler : IStaticDataSourceHandler
 {
-    protected override Dictionary<string, string> EnumValues => new()
-    {
-        { "aws", "AWS" },
-        { "speechmatics_v2", "Speechmatics V2" }
-    };
+    public Dictionary<string, string> GetData()
+        => new()
+        {
+            { "aws", "AWS" },
+            { "speechmatics_v2", "Speechmatics V2" }
+        };
 }

@@ -1,6 +1,7 @@
 ﻿using Apps.CaptionHub.DataSourceHandlers;
 using Apps.CaptionHub.DataSourceHandlers.EnumHandleres;
 using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Dictionaries;
 using Blackbird.Applications.Sdk.Common.Dynamic;
 using Newtonsoft.Json;
 
@@ -28,6 +29,6 @@ public class CreateTranslatedCaptionSetRequest
 
     [Display("Translation provider")]
     [JsonProperty("translation_provider")]
-    [DataSource(typeof(TranslationProviderDataHandler))]
+    [StaticDataSource(typeof(TranslationProviderDataHandler))]
     public string? TranslationProvider { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using Apps.CaptionHub.DataSourceHandlers;
 using Apps.CaptionHub.DataSourceHandlers.EnumHandleres;
 using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Dictionaries;
 using Blackbird.Applications.Sdk.Common.Dynamic;
 using Newtonsoft.Json;
 
@@ -46,7 +47,7 @@ public class CreateProjectRequest
 
     [Display("Override framerate")]
     [JsonProperty("override_framerate")]
-    [DataSource(typeof(OverrideFramerateDataHandler))]
+    [StaticDataSource(typeof(OverrideFramerateDataHandler))]
     public string? OverrideFramerate { get; set; }
 
     [Display("Automation ID")]
@@ -56,12 +57,12 @@ public class CreateProjectRequest
 
     [Display("Original captions workflow type")]
     [JsonProperty("original_captions_workflow_type")]
-    [DataSource(typeof(WorkflowTypeDataHandler))]
+    [StaticDataSource(typeof(WorkflowTypeDataHandler))]
     public string? OriginalCaptionsWorkflowType { get; set; }
 
     [Display("Translations workflow type")]
     [JsonProperty("translations_workflow_type")]
-    [DataSource(typeof(WorkflowTypeDataHandler))]
+    [StaticDataSource(typeof(WorkflowTypeDataHandler))]
     public string? TranslationsWorkflowType { get; set; }
 
     [Display("Timecode start (SMPTE format, e.g., '10:00:00:00')")]
