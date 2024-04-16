@@ -1,15 +1,16 @@
-﻿using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
+﻿using Blackbird.Applications.Sdk.Common.Dictionaries;
 
 namespace Apps.CaptionHub.DataSourceHandlers.EnumHandleres;
 
-public class UserRoleDataHandler : EnumDataHandler
+public class UserRoleDataHandler : IStaticDataSourceHandler
 {
-    protected override Dictionary<string, string> EnumValues => new()
-    {
-        { "linguist", "Linguist" },
-        { "reviewer", "Reviewer" },
-        { "producer", "Producer" },
-        { "language_supervisor", "Language supervisor" },
-        { "superuser", "Superuser" },
-    };
+    public Dictionary<string, string> GetData()
+        => new()
+        {
+            { "linguist", "Linguist" },
+            { "reviewer", "Reviewer" },
+            { "producer", "Producer" },
+            { "language_supervisor", "Language supervisor" },
+            { "superuser", "Superuser" },
+        };
 }

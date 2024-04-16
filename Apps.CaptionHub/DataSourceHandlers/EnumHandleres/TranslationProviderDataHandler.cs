@@ -1,14 +1,15 @@
-﻿using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
+﻿using Blackbird.Applications.Sdk.Common.Dictionaries;
 
 namespace Apps.CaptionHub.DataSourceHandlers.EnumHandleres;
 
-public class TranslationProviderDataHandler : EnumDataHandler
+public class TranslationProviderDataHandler : IStaticDataSourceHandler
 {
-    protected override Dictionary<string, string> EnumValues => new()
-    {
-        { "amazon", "Amazon" },
-        { "gengo", "Gengo" },
-        { "google", "Google" },
-        { "systran", "Systran" }
-    };
+    public Dictionary<string, string> GetData()
+        => new()
+        {
+            { "amazon", "Amazon" },
+            { "gengo", "Gengo" },
+            { "google", "Google" },
+            { "systran", "Systran" }
+        };
 }

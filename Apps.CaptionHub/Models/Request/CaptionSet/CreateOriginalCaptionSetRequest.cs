@@ -1,6 +1,7 @@
 ﻿using Apps.CaptionHub.DataSourceHandlers;
 using Apps.CaptionHub.DataSourceHandlers.EnumHandleres;
 using Blackbird.Applications.Sdk.Common;
+using Blackbird.Applications.Sdk.Common.Dictionaries;
 using Blackbird.Applications.Sdk.Common.Dynamic;
 using Newtonsoft.Json;
 
@@ -19,12 +20,12 @@ public class CreateOriginalCaptionSetRequest
 
     [Display("Transcription provider")]
     [JsonProperty("transcription_provider")]
-    [DataSource(typeof(TranscriptionProviderDataHandler))]
+    [StaticDataSource(typeof(TranscriptionProviderDataHandler))]
     public string? TranscriptionProvider { get; set; }
 
     [Display("Split text file on")]
     [JsonProperty("split_text_file_on")]
-    [DataSource(typeof(SplitTextFileOnHandler))]
+    [StaticDataSource(typeof(SplitTextFileOnHandler))]
     public string? SplitTextFileOn { get; set; }
 
     [Display("Language ID")]

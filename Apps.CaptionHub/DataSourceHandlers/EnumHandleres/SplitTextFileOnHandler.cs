@@ -1,10 +1,11 @@
-﻿using Blackbird.Applications.Sdk.Utils.Sdk.DataSourceHandlers;
+﻿using Blackbird.Applications.Sdk.Common.Dictionaries;
 
 namespace Apps.CaptionHub.DataSourceHandlers.EnumHandleres;
 
-public class SplitTextFileOnHandler : EnumDataHandler
+public class SplitTextFileOnHandler : IStaticDataSourceHandler
 {
-    protected override Dictionary<string, string> EnumValues => new()
+    public Dictionary<string, string> GetData()
+     => new()
     {
         {"smart_audio", "Smart audio"},
         {"sentences", "Sentences"},
