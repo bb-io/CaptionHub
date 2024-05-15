@@ -41,6 +41,9 @@ public class ProjectActions : CaptionHubInvocable
                 InvocationContext.UriInfo.BridgeServiceUrl.ToString().SetQueryParameter("id", id);
         }
 
+        if (files.OriginalMedia is null && files.OriginalMediaUrl is null)
+            throw new("You should mandatory specify one of the inputs: Original media or Original media URL");
+
         var request = new CaptionHubRequest(ApiEndpoints.Projects, Method.Post, Creds)
             .WithFormData(input, true, ignoreNullValues: true)
             .AddParameter("original_media_url", (files.OriginalMedia?.Url ?? files.OriginalMediaUrl) ?? string.Empty);
