@@ -22,12 +22,25 @@ public class CaptionHubClient : BlackBirdRestClient
     protected override Exception ConfigureErrorException(RestResponse response)
     {
         var responseContent = HttpUtility.HtmlDecode(response.Content);
-        var error = JsonConvert.DeserializeObject<ErrorResponse>(responseContent);
+        var errorMessage = GetErrorMessage(responseContent);
 
-        var errorMessage = error.Error.Contains("Server error")
+        errorMessage = errorMessage.Contains("Server error")
             ? "Something went wrong, you should check your inputs"
-            : error.Error;
+            : errorMessage;
         return new(errorMessage);
+    }
+
+    private string? GetErrorMessage(string? responseContent)
+    {
+        try
+        {
+            return JsonConvert.DeserializeObject<ErrorResponse>(responseContent).Error;
+        }
+        catch
+        {
+            var multipleErrorResponse = JsonConvert.DeserializeObject<MultipleErrorResponse>(responseContent);
+            return string.Join(';', multipleErrorResponse.Error);
+        }
     }
 
     public async Task<List<T>> Paginate<T>(CaptionHubRequest request)
