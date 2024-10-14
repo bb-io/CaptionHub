@@ -72,25 +72,6 @@ public class ProjectActions : CaptionHubInvocable
         return Client.ExecuteWithErrorHandling<ProjectEntity>(request);
     }
 
-    [Action("Wait until project has original caption set",
-        Description =
-            "Wait until a caption set is present on a project. Use in conjunction with CaptionHub automations.")]
-    public async Task<ProjectEntity> WaitUntilCaptionSet([ActionParameter] ProjectRequest project)
-    {
-        var endpoint = $"{ApiEndpoints.Projects}/{project.ProjectId}";
-        var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
-
-        ProjectResponse? result = null;
-
-        while (result?.OriginalCaptionSet is null || result.OriginalCaptionSet.PercentageComplete < 100)
-        {
-            await Task.Delay(3000);
-            result = await Client.ExecuteWithErrorHandling<ProjectResponse>(request);
-        }
-
-        return new(result);
-    }
-
     [Action("Delete project", Description = "Delete specific project")]
     public Task DeleteProject([ActionParameter] ProjectRequest project)
     {
