@@ -32,7 +32,7 @@ public class CaptionSetEntity
     public int MinimumFramesBetweenCaptions { get; set; }
 
     [Display("Ready")]
-    public string Ready { get; set; }
+    public bool Ready { get; set; }
 
     [Display("Latest snapshot ID")]
     public string LatestSnapshotId { get; set; }

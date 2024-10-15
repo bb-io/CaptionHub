@@ -37,11 +37,6 @@ public class ProjectEntity
 
     [Display("Timecode start")] public string TimecodeStartString { get; set; }
 
-    // [Display("Original caption set")]
-    // public CaptionSetEntity? OriginalCaptionSet { get; set; }
-
-    // [Display("Caption sets")] public CaptionSetEntity[] CaptionSets { get; set; }
-
     [Display("Word count")] public string WordCount { get; set; }
 
     public ProjectEntity()
