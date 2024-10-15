@@ -45,24 +45,12 @@ public class RenderActions : CaptionHubInvocable
     }
 
     [Action("Create render", Description = "Create a render for the the given caption set")]
-    public async Task<RenderingEntity> CreateRender([ActionParameter] CaptionSetRequest input)
+    public Task<RenderingEntity> CreateRender([ActionParameter] CaptionSetRequest input)
     {
         var endpoint = $"{ApiEndpoints.CaptionSets}/{input.CaptionSetId}/renders";
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds);
 
-        var result = await Client.ExecuteWithErrorHandling<RenderingEntity>(request);
-
-        while (result.Status == "rendering" || result.Status == "queued")
-        {
-            await Task.Delay(1000);
-            result = await GetRenderStatus(new()
-            {
-                RenderId = result.Id,
-                CaptionSetId = input.CaptionSetId
-            });
-        }
-
-        return result;
+        return Client.ExecuteWithErrorHandling<RenderingEntity>(request);
     }
 
     [Action("Download render", Description = "Download completed render")]
