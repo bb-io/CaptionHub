@@ -6,6 +6,7 @@ using Apps.CaptionHub.Models.Request.Project;
 using Apps.CaptionHub.Models.Response.Project;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Actions;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Utils.Extensions.Http;
 using Blackbird.Applications.Sdk.Utils.Extensions.Sdk;
@@ -42,7 +43,7 @@ public class ProjectActions : CaptionHubInvocable
         }
 
         if (files.OriginalMedia is null && files.OriginalMediaUrl is null)
-            throw new("You should mandatory specify one of the inputs: Original media or Original media URL");
+            throw new PluginMisconfigurationException("You should mandatory specify one of the inputs: Original media or Original media URL");
 
         var request = new CaptionHubRequest(ApiEndpoints.Projects, Method.Post, Creds)
             .WithFormData(input, true, ignoreNullValues: true)
