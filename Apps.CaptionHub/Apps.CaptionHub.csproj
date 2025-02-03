@@ -6,6 +6,7 @@
     <Product>CaptionHub</Product>
     <Description>Collaborative captioning and subtitling tool</Description>
     <Version>1.4.7</Version>
+
     <AssemblyName>Apps.CaptionHub</AssemblyName>
   </PropertyGroup>
   <ItemGroup>
