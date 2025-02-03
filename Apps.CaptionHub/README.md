@@ -38,7 +38,7 @@ CaptionHub is a cloud-based platform that provided services related to video cap
 - **Create translated caption set** creates a caption set ready for translation.
 - **Create original caption set** creates a new original caption set.
 - **Download original/translated captions** downloads a caption set in the requested format.
-- **"Publish caption set** publishes a caption set.
+- **Publish caption set** publishes a caption set.
 
 ### Custom dictionaries
 
