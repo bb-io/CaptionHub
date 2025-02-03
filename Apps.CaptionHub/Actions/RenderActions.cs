@@ -11,6 +11,7 @@ using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using Blackbird.Applications.Sdk.Utils.Utilities;
 using RestSharp;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 
 namespace Apps.CaptionHub.Actions;
 
@@ -38,7 +39,7 @@ public class RenderActions : CaptionHubInvocable
         catch (Exception ex)
         {
             if (ex.Message == "Bad Request")
-                throw new("Could not find a render, perhaps it has been cancelled");
+                throw new PluginApplicationException("Could not find a render, perhaps it has been cancelled");
 
             throw;
         }
@@ -59,7 +60,7 @@ public class RenderActions : CaptionHubInvocable
         var render = await GetRenderStatus(input);
 
         if (render.Status != "completed")
-            throw new("Render is not completed now, please try downloading it later");
+            throw new PluginApplicationException("Render is not completed now, please try downloading it later");
 
         var endpoint = $"{ApiEndpoints.CaptionSets}/{input.CaptionSetId}/renders/{input.RenderId}/download_url";
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds);

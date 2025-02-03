@@ -1,6 +1,7 @@
 ﻿using System.Web;
 using Apps.CaptionHub.Constants;
 using Apps.CaptionHub.Models.Response;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 using Blackbird.Applications.Sdk.Utils.Extensions.String;
 using Blackbird.Applications.Sdk.Utils.RestSharp;
 using Newtonsoft.Json;
@@ -27,7 +28,7 @@ public class CaptionHubClient : BlackBirdRestClient
         errorMessage = errorMessage.Contains("Server error")
             ? "Something went wrong, you should check your inputs"
             : errorMessage;
-        return new(errorMessage);
+        throw new PluginApplicationException(errorMessage);
     }
 
     private string? GetErrorMessage(string? responseContent)

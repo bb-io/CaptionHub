@@ -14,6 +14,7 @@ using Blackbird.Applications.SDK.Extensions.FileManagement.Interfaces;
 using Blackbird.Applications.Sdk.Utils.Extensions.Http;
 using Blackbird.Applications.Sdk.Utils.Extensions.String;
 using RestSharp;
+using Blackbird.Applications.Sdk.Common.Exceptions;
 
 namespace Apps.CaptionHub.Actions;
 
@@ -49,6 +50,15 @@ public class CaptionSetActions : CaptionHubInvocable
         return Client.ExecuteWithErrorHandling(request);
     }
 
+    [Action("Publish caption set", Description = "Publish a specific caption set")]
+    public Task PublishCaptionSet([ActionParameter] CaptionSetRequest input)
+    {
+        var endpoint = $"{ApiEndpoints.CaptionSets}/{input.CaptionSetId}/publish";
+        var request = new CaptionHubRequest(endpoint, Method.Put, Creds);
+
+        return Client.ExecuteWithErrorHandling(request);
+    }
+
     [Action("Make caption set reviewable", Description = "Make all segments in a caption set reviewable")]
     public Task MakeCaptionSetReviewable([ActionParameter] CaptionSetRequest input)
     {
@@ -72,7 +82,7 @@ public class CaptionSetActions : CaptionHubInvocable
         [ActionParameter] CreateTranslatedCaptionSetRequest input)
     {
         if (input.LanguageCode is null && input.LanguageId is null)
-            throw new("You should specify one of the inputs: Language code or Language ID");
+            throw new PluginMisconfigurationException("You should specify one of the inputs: Language code or Language ID");
 
         var endpoint = $"{ApiEndpoints.CaptionSets}/translation";
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds)
@@ -87,7 +97,7 @@ public class CaptionSetActions : CaptionHubInvocable
         [ActionParameter] CaptionSetTextRequest text)
     {
         if (input.LanguageCode is null && input.LanguageId is null)
-            throw new("You should specify one of the inputs: Language code or Language ID");
+            throw new PluginMisconfigurationException("You should specify one of the inputs: Language code or Language ID");
 
         var endpoint = $"{ApiEndpoints.CaptionSets}/original";
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds)
@@ -147,7 +157,7 @@ public class CaptionSetActions : CaptionHubInvocable
     public async Task UpdateTranslation([ActionParameter] UpdateTranslationRequest input)
     {
         if (input.LanguageCode is null && input.LanguageId is null)
-            throw new("You should specify one of the inputs: Language code or Language ID");
+            throw new PluginMisconfigurationException("You should specify one of the inputs: Language code or Language ID");
 
         var file = await _fileManagementClient.DownloadAsync(input.File);
 
