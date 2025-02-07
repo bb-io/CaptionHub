@@ -28,6 +28,9 @@ public class WebhookList
         if (input.CaptionSetId != null && payload.CaptionSet.Id != input.CaptionSetId)
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
+        if (input.LanguageId != null && payload.CaptionSet.Language.Id != input.LanguageId)
+            return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
+
         return Task.FromResult(new WebhookResponse<CaptionSetWebhookResponse>()
         {
             Result = payload
@@ -45,6 +48,9 @@ public class WebhookList
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
         if (input.CaptionSetId != null && payload.CaptionSet.Id != input.CaptionSetId)
+            return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
+
+        if (input.LanguageId != null && payload.CaptionSet.Language.Id != input.LanguageId)
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
         return Task.FromResult(new WebhookResponse<CaptionSetWebhookResponse>()
@@ -66,6 +72,9 @@ public class WebhookList
         if (input.CaptionSetId != null && payload.CaptionSet.Id != input.CaptionSetId)
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
+        if (input.LanguageId != null && payload.CaptionSet.Language.Id != input.LanguageId)
+            return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
+
         return Task.FromResult(new WebhookResponse<CaptionSetWebhookResponse>()
         {
             Result = payload
@@ -83,6 +92,9 @@ public class WebhookList
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
         if (input.CaptionSetId != null && payload.CaptionSet.Id != input.CaptionSetId)
+            return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
+
+        if (input.LanguageId != null && payload.CaptionSet.Language.Id != input.LanguageId)
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
         return Task.FromResult(new WebhookResponse<CaptionSetWebhookResponse>()
@@ -107,6 +119,9 @@ public class WebhookList
         if (input.RenderId != null && payload.Rendering.Id != input.RenderId)
             return Task.FromResult(GetPreflightResponse<RenderingWebhookResponse>());
 
+        if (input.LanguageId != null && payload.CaptionSet?.Language?.Id != input.LanguageId)
+            return Task.FromResult(GetPreflightResponse<RenderingWebhookResponse>());
+
         return Task.FromResult(new WebhookResponse<RenderingWebhookResponse>()
         {
             Result = payload
@@ -124,6 +139,9 @@ public class WebhookList
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
         if (input.CaptionSetId != null && payload.CaptionSet.Id != input.CaptionSetId)
+            return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
+
+        if (input.LanguageId != null && payload.CaptionSet.Language.Id != input.LanguageId)
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
         return Task.FromResult(new WebhookResponse<CaptionSetWebhookResponse>()
@@ -146,6 +164,9 @@ public class WebhookList
         if (input.CaptionSetId != null && payload.CaptionSet.Id != input.CaptionSetId)
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
+        if (input.LanguageId != null && payload.CaptionSet.Language.Id != input.LanguageId)
+            return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
+
         return Task.FromResult(new WebhookResponse<CaptionSetWebhookResponse>()
         {
             Result = payload
@@ -163,6 +184,9 @@ public class WebhookList
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
         if (input.CaptionSetId != null && payload.CaptionSet.Id != input.CaptionSetId)
+            return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
+
+        if (input.LanguageId != null && payload.CaptionSet.Language.Id != input.LanguageId)
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
         return Task.FromResult(new WebhookResponse<CaptionSetWebhookResponse>()
@@ -185,6 +209,9 @@ public class WebhookList
         if (input.CaptionSetId != null && payload.CaptionSet.Id != input.CaptionSetId)
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
+        if (input.LanguageId != null && payload.CaptionSet.Language.Id != input.LanguageId)
+            return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
+
         return Task.FromResult(new WebhookResponse<CaptionSetWebhookResponse>()
         {
             Result = payload
@@ -202,6 +229,9 @@ public class WebhookList
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
         if (input.CaptionSetId != null && payload.CaptionSet.Id != input.CaptionSetId)
+            return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
+
+        if (input.LanguageId != null && payload.CaptionSet.Language.Id != input.LanguageId)
             return Task.FromResult(GetPreflightResponse<CaptionSetWebhookResponse>());
 
         return Task.FromResult(new WebhookResponse<CaptionSetWebhookResponse>()
