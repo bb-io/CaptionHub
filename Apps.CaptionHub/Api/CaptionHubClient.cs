@@ -25,10 +25,19 @@ public class CaptionHubClient : BlackBirdRestClient
         var responseContent = HttpUtility.HtmlDecode(response.Content);
         var errorMessage = GetErrorMessage(responseContent);
 
+        if (response.StatusCode == System.Net.HttpStatusCode.BadRequest)
+        {
+            errorMessage = string.IsNullOrWhiteSpace(errorMessage)
+                ? "The server returned a bad request error. Please check your inputs and try again"
+                : errorMessage;
+            throw new PluginApplicationException(errorMessage);
+        }
+
         errorMessage = errorMessage.Contains("Server error")
             ? "Something went wrong, you should check your inputs"
             : errorMessage;
         throw new PluginApplicationException(errorMessage);
+
     }
 
     private string? GetErrorMessage(string? responseContent)
