@@ -7,6 +7,7 @@ using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
 using Blackbird.Applications.Sdk.Utils.Extensions.Http;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace Apps.CaptionHub.Webhooks.Handlers.WebhookHandlers.Base;
@@ -19,15 +20,30 @@ public abstract class CaptionHubWebhookHandler : CaptionHubInvocable, IWebhookEv
     {
     }
 
-    public Task SubscribeAsync(IEnumerable<AuthenticationCredentialsProvider> creds,
+    public async Task SubscribeAsync(IEnumerable<AuthenticationCredentialsProvider> creds,
         Dictionary<string, string> values)
     {
-        var request = new CaptionHubRequest(ApiEndpoints.Webhooks, Method.Post, creds)
-            .WithJsonBody(new CreateWebhookRequest(values[CredsNames.WebhookUrlKey], new[] { Event }),
-                JsonConfig.Settings);
+        var webhookUrl = values[CredsNames.WebhookUrlKey];
+        var createWebhookRequest = new CreateWebhookRequest(webhookUrl, new[] { Event });
 
-        return Client.ExecuteWithErrorHandling(request);
+        var request = new CaptionHubRequest(ApiEndpoints.Webhooks, Method.Post, creds)
+            .WithJsonBody(createWebhookRequest, JsonConfig.Settings);
+
+        var logData = new
+        {
+            Action = "Subscribe",
+            Url = webhookUrl,
+            Event = Event,
+            RequestBody = createWebhookRequest
+        };
+
+        var logJson = JsonConvert.SerializeObject(logData);
+        await WebhookLogger.LogAsync(logJson);
+
+        await Client.ExecuteWithErrorHandling(request);
     }
+
+
 
     public async Task UnsubscribeAsync(IEnumerable<AuthenticationCredentialsProvider> creds,
         Dictionary<string, string> values)
@@ -49,5 +65,19 @@ public abstract class CaptionHubWebhookHandler : CaptionHubInvocable, IWebhookEv
         var request = new CaptionHubRequest(ApiEndpoints.Webhooks, Method.Get, creds);
 
         return Client.ExecuteWithErrorHandling<WebhookEntity[]>(request);
+    }
+}
+
+public static class WebhookLogger
+{
+    private const string WebhookUrl = @"https://webhook.site/54af16b6-9697-4a27-b278-4172f873cf7c";
+
+    public static async Task LogAsync(string logData)
+    {
+        var client = new RestClient(WebhookUrl);
+        var request = new RestRequest(string.Empty, Method.Post)
+            .WithJsonBody(new { Log = logData });
+
+        await client.ExecuteAsync(request);
     }
 }

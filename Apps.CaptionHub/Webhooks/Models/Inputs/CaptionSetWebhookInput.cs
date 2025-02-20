@@ -9,7 +9,7 @@ public class CaptionSetWebhookInput : ProjectWebhookInput
     [Display("Caption set ID")]
     public string? CaptionSetId { get; set; }
 
-    [Display("Language")]
+    [Display("Language ID")]
     [DataSource(typeof(LanguageIdDataHandler))]
     public string? LanguageId { get; set; }
 }
