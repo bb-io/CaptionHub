@@ -26,7 +26,13 @@ public abstract class CaptionHubWebhookHandler : CaptionHubInvocable, IWebhookEv
             .WithJsonBody(new CreateWebhookRequest(values[CredsNames.WebhookUrlKey], new[] { Event }),
                 JsonConfig.Settings);
 
-        WebhookLogger.LogAsync(request);
+         WebhookLogger.LogAsync(new
+        {
+            Action = "Subscribe",
+            Url = values[CredsNames.WebhookUrlKey],
+            Event = Event,
+            RequestBody = request
+        });
 
         return Client.ExecuteWithErrorHandling(request);
     }
