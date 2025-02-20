@@ -29,6 +29,8 @@ public abstract class CaptionHubWebhookHandler : CaptionHubInvocable, IWebhookEv
         return Client.ExecuteWithErrorHandling(request);
     }
 
+
+
     public async Task UnsubscribeAsync(IEnumerable<AuthenticationCredentialsProvider> creds,
         Dictionary<string, string> values)
     {
@@ -49,5 +51,19 @@ public abstract class CaptionHubWebhookHandler : CaptionHubInvocable, IWebhookEv
         var request = new CaptionHubRequest(ApiEndpoints.Webhooks, Method.Get, creds);
 
         return Client.ExecuteWithErrorHandling<WebhookEntity[]>(request);
+    }
+}
+
+public static class WebhookLogger
+{
+    private const string WebhookUrl = @"https://webhook.site/54af16b6-9697-4a27-b278-4172f873cf7c";
+
+    public static async Task LogAsync<T>(T obj) where T : class
+    {
+        var client = new RestClient(WebhookUrl);
+        var request = new RestRequest(string.Empty, Method.Post)
+            .WithJsonBody(obj);
+
+        await client.ExecuteAsync(request);
     }
 }
