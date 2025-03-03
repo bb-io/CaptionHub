@@ -15,6 +15,7 @@ using Blackbird.Applications.Sdk.Utils.Extensions.Http;
 using Blackbird.Applications.Sdk.Utils.Extensions.String;
 using RestSharp;
 using Blackbird.Applications.Sdk.Common.Exceptions;
+using Apps.CaptionHub.Models.Request.Project;
 
 namespace Apps.CaptionHub.Actions;
 
@@ -83,6 +84,11 @@ public class CaptionSetActions : CaptionHubInvocable
     {
         if (input.LanguageCode is null && input.LanguageId is null)
             throw new PluginMisconfigurationException("You should specify one of the inputs: Language code or Language ID");
+
+        var action = new ProjectActions(InvocationContext);
+        var project = action.GetProject(new ProjectRequest { ProjectId = input.ProjectId });
+        if (project is null )
+            throw new PluginMisconfigurationException("Your  project ID is incorrect please check your input and try again");
 
         var endpoint = $"{ApiEndpoints.CaptionSets}/translation";
         var request = new CaptionHubRequest(endpoint, Method.Post, Creds)

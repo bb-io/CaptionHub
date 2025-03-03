@@ -35,7 +35,33 @@ namespace Tests.CaptionHub
 
 
 
+        [TestMethod]
+        public async Task CreateTranslationCaptionSet_ReturnSucces()
+        {
+            var action = new CaptionSetActions(InvocationContext, FileManager);
+            var createProjectRequest = new CreateTranslatedCaptionSetRequest 
+            { ProjectId = "BB_testing project including translation step", 
+                LanguageCode = "CA-ES", 
+                TranslationProvider="amazon" 
+            };
 
+            var response = await action.CreateTranslatedCaptionSet(createProjectRequest);
+
+            Console.WriteLine(response.Id);
+            Assert.IsNotNull(response);
+        }
+
+
+        [TestMethod]
+        public async Task GetProject_ReturnSucces()
+        {
+            var action = new ProjectActions(InvocationContext);
+            var createProjectRequest = new ProjectRequest { ProjectId = "278143" };
+            var response = await action.GetProject(createProjectRequest);
+
+            Console.WriteLine(response.Id);
+            Assert.IsNotNull(response);
+        }
 
 
     }
