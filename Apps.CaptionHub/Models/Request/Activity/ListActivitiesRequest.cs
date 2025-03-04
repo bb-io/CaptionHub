@@ -20,7 +20,7 @@ public class ListActivitiesRequest
     public string? FromDate { get; set; }
 
     [JsonProperty("project_id")] 
-    [Display("Project")]
+    [Display("Project ID")]
     [DataSource(typeof(ProjectDataHandler))]
     public string? ProjectId { get; set; }
 }

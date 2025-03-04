@@ -7,7 +7,7 @@ namespace Apps.CaptionHub.Models.Request.CaptionSet;
 
 public class DownloadOriginalCaptionSetRequest
 {
-    [Display("Project")]
+    [Display("Project ID")]
     [JsonProperty("project_id")]
     [DataSource(typeof(ProjectDataHandler))]
     public string ProjectId { get; set; }

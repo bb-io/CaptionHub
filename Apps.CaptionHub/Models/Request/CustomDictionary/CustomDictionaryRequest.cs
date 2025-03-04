@@ -6,7 +6,7 @@ namespace Apps.CaptionHub.Models.Request.CustomDictionary;
 
 public class CustomDictionaryRequest
 {
-    [Display("Custom dictionary")]
+    [Display("Custom dictionary ID")]
     [DataSource(typeof(CustomDictionaryDataHandler))]
     public string CustomDictionaryId { get; set; }
 }
