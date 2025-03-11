@@ -72,7 +72,7 @@ public class CaptionSetActions : CaptionHubInvocable
     [Action("Make caption set claimable", Description = "Make all segments in a caption set claimable")]
     public Task MakeCaptionSetClaimable([ActionParameter] CaptionSetRequest input)
     {
-        var endpoint = $"{ApiEndpoints.CaptionSets}/{input.CaptionSetId}/mark_claimable";
+        var endpoint = $"{ApiEndpoints.CaptionSets}/{input.CaptionSetId}/make_claimable";
         var request = new CaptionHubRequest(endpoint, Method.Put, Creds);
 
         return Client.ExecuteWithErrorHandling(request);

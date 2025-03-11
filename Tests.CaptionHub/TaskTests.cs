@@ -40,9 +40,11 @@ namespace Tests.CaptionHub
         {
             var action = new CaptionSetActions(InvocationContext, FileManager);
             var createProjectRequest = new CreateTranslatedCaptionSetRequest 
-            { ProjectId = "BB_testing project including translation step", 
-                LanguageCode = "CA-ES", 
-                TranslationProvider="amazon" 
+            { 
+                ProjectId = "278143", 
+                LanguageCode = "ES", 
+                TranslationProvider="amazon" ,
+                Autotranslation = true
             };
 
             var response = await action.CreateTranslatedCaptionSet(createProjectRequest);
@@ -63,6 +65,13 @@ namespace Tests.CaptionHub
             Assert.IsNotNull(response);
         }
 
-
+        [TestMethod]
+        public async Task MakeCaptionSetClaimable_ReturnSucces()
+        {
+            var action = new CaptionSetActions(InvocationContext,FileManager);
+            var createProjectRequest = new CaptionSetRequest { CaptionSetId = "" };
+            await action.MakeCaptionSetClaimable(createProjectRequest);
+            Assert.IsTrue(true);
+        }
     }
 }
