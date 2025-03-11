@@ -69,10 +69,9 @@ namespace Tests.CaptionHub
         public async Task MakeCaptionSetClaimable_ReturnSucces()
         {
             var action = new CaptionSetActions(InvocationContext,FileManager);
-            var createProjectRequest = new CaptionSetRequest { CaptionSetId = "2935703" };
+            var createProjectRequest = new CaptionSetRequest { CaptionSetId = "" };
             await action.MakeCaptionSetClaimable(createProjectRequest);
             Assert.IsTrue(true);
         }
-
     }
 }
