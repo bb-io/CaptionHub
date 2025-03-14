@@ -9,5 +9,6 @@ public class LanguageCallbackPayload
     [JsonProperty("name")]
     public string LanguageName { get; set; }
 
+    [JsonProperty("code_and_territory")]
     public string Code { get; set; }
 }
