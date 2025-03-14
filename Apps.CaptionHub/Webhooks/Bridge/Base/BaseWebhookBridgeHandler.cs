@@ -1,8 +1,12 @@
 ﻿using Apps.CaptionHub.Api;
+using Apps.CaptionHub.Constants;
+using Apps.CaptionHub.Models.Request.Webhook;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Invocation;
 using Blackbird.Applications.Sdk.Common.Webhooks;
+using Blackbird.Applications.Sdk.Utils.Extensions.Http;
+using RestSharp;
 
 namespace Apps.CaptionHub.Webhooks.Bridge.Base
 {
@@ -30,12 +34,19 @@ namespace Apps.CaptionHub.Webhooks.Bridge.Base
             var bridge = new BridgeService(authenticationCredentialsProviders, _bridgeServiceUrl);
             string eventType = SubscriptionEvent;
             bridge.Subscribe(eventType, ProjectId, values["payloadUrl"]);
+
+            var captionHubWebhookUrl = _bridgeServiceUrl;
+            var createWebhookRequest = new CreateWebhookRequest(captionHubWebhookUrl, new[] { SubscriptionEvent });
+            var request = new CaptionHubRequest(ApiEndpoints.Webhooks, Method.Post, authenticationCredentialsProviders)
+            .WithJsonBody(createWebhookRequest, JsonConfig.Settings);
+
+            await Client.ExecuteWithErrorHandling(request);
         }
 
         public async Task UnsubscribeAsync(IEnumerable<AuthenticationCredentialsProvider> authenticationCredentialsProviders,
             Dictionary<string, string> values)
         {
-            var bridge = new BridgeService(authenticationCredentialsProviders, _bridgeServiceUrl); ;
+            var bridge = new BridgeService(authenticationCredentialsProviders, _bridgeServiceUrl);
             bridge.Unsubscribe(SubscriptionEvent, ProjectId, values["payloadUrl"]);
         }
     }

@@ -32,7 +32,7 @@ public abstract class CaptionHubWebhookHandler : CaptionHubInvocable, IWebhookEv
         var logData = new
         {
             Action = "Subscribe",
-            Url = webhookUrl,
+            Url = webhookUrl,   
             Event = Event,
             RequestBody = createWebhookRequest
         };
