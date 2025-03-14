@@ -1,6 +1,7 @@
 ﻿using Apps.CaptionHub.Api;
 using Apps.CaptionHub.Constants;
 using Apps.CaptionHub.Models.Request.Webhook;
+using Apps.CaptionHub.Webhooks.Models.Payloads.CaptionSet.Callbacks;
 using Blackbird.Applications.Sdk.Common;
 using Blackbird.Applications.Sdk.Common.Authentication;
 using Blackbird.Applications.Sdk.Common.Invocation;
@@ -34,8 +35,21 @@ namespace Apps.CaptionHub.Webhooks.Bridge.Base
             var bridge = new BridgeService(authenticationCredentialsProviders, _bridgeServiceUrl);
             string eventType = SubscriptionEvent;
             bridge.Subscribe(eventType, ProjectId, values["payloadUrl"]);
-
             var captionHubWebhookUrl = _bridgeServiceUrl;
+
+            var getRequest = new CaptionHubRequest(ApiEndpoints.Webhooks, Method.Get, authenticationCredentialsProviders);
+            var existingWebhooks = await Client.ExecuteWithErrorHandling<List<CaptionHubWebhookDto>>(getRequest);
+
+            bool alreadyExists = existingWebhooks.Any(w =>
+                w.Url == captionHubWebhookUrl &&
+                w.SubscribedEvents != null &&
+                w.SubscribedEvents.Contains(SubscriptionEvent));
+
+            if (alreadyExists)
+            {
+                return;
+            }
+
             var createWebhookRequest = new CreateWebhookRequest(captionHubWebhookUrl, new[] { SubscriptionEvent });
             var request = new CaptionHubRequest(ApiEndpoints.Webhooks, Method.Post, authenticationCredentialsProviders)
             .WithJsonBody(createWebhookRequest, JsonConfig.Settings);
