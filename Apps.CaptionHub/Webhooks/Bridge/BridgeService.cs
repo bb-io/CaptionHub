@@ -17,7 +17,7 @@ namespace Apps.CaptionHub.Webhooks.Bridge
         {
             var client = new RestClient(BridgeServiceUrl);
             var request = new RestRequest($"/{projectId}/{_event}", Method.Post);
-            request.AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdToken);
+            request.AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdWebhookToken);
             request.AddBody(url);
 
             var response = client.Execute(request);
@@ -31,12 +31,12 @@ namespace Apps.CaptionHub.Webhooks.Bridge
         {
             var client = new RestClient(BridgeServiceUrl);
             var requestGet = new RestRequest($"/{projectId}/{_event}", Method.Get);
-            requestGet.AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdToken);
+            requestGet.AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdWebhookToken);
             var webhooks = client.Get<List<BridgeGetResponse>>(requestGet);
             var webhook = webhooks.FirstOrDefault(w => w.Value == url);
 
             var requestDelete = new RestRequest($"/{projectId}/{_event}/{webhook.Id}", Method.Delete);
-            requestDelete.AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdToken);
+            requestDelete.AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdWebhookToken);
             client.Delete(requestDelete);
         }
 
@@ -44,7 +44,7 @@ namespace Apps.CaptionHub.Webhooks.Bridge
         {
             var client = new RestClient(BridgeServiceUrl);
             var request = new RestRequest($"/{projectId}/{_event}", Method.Get);
-            request.AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdToken);
+            request.AddHeader("Blackbird-Token", ApplicationConstants.BlackbirdWebhookToken);
             var response = client.Get<List<BridgeGetResponse>>(request);
             return response?.Any() ?? false;
         }
