@@ -137,15 +137,21 @@ public class CallbackList
 
     [Webhook("On caption set unapproved", typeof(CaptionSetUnapprovedHandler),
         Description = "On any project caption set unapproved")]
-    public Task<WebhookResponse<CaptionSetCallbackResponse>> OnCaptionSetUnapproved(WebhookRequest webhookRequest, [WebhookParameter] CaptionSetWebhookInput input)
+    public Task<WebhookResponse<CaptionSetCallbackResponse>> OnCaptionSetUnapproved(WebhookRequest webhookRequest, [WebhookParameter] CaptionSetApprovedWebhookInput input)
     {
         var payload = GetPayload<CaptionSetCallbackResponse>(webhookRequest);
 
         if (input.ProjectId != null && payload.Project.Id != input.ProjectId)
             return Task.FromResult(GetPreflightResponse<CaptionSetCallbackResponse>());
-        
+
         if (input.CaptionSetId != null && payload.CaptionSet.CaptionSetId != input.CaptionSetId)
             return Task.FromResult(GetPreflightResponse<CaptionSetCallbackResponse>());
+
+        if (input.LanguageCodes != null && input.LanguageCodes.Any())
+        {
+            if (!input.LanguageCodes.Contains(payload.CaptionSet.Language.Code))
+                return Task.FromResult(GetPreflightResponse<CaptionSetCallbackResponse>());
+        }
 
         return Task.FromResult(new WebhookResponse<CaptionSetCallbackResponse>()
         {
