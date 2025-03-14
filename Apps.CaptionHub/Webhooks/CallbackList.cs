@@ -114,11 +114,12 @@ public class CallbackList
         Description = "On any project caption set approved")]
     public Task<WebhookResponse<CaptionSetCallbackResponse>> OnCaptionSetApproved(WebhookRequest webhookRequest, [WebhookParameter] CaptionSetApprovedWebhookInput input)
     {
-        var payload = GetPayload<CaptionSetCallbackResponse>(webhookRequest);
+        var root = GetPayload<RootCaptionHubPayload>(webhookRequest);
+        var payload = root.Data;
 
         if (input.ProjectId != null && payload.Project.Id != input.ProjectId)
             return Task.FromResult(GetPreflightResponse<CaptionSetCallbackResponse>());
-        
+
         if (input.CaptionSetId != null && payload.CaptionSet.CaptionSetId != input.CaptionSetId)
             return Task.FromResult(GetPreflightResponse<CaptionSetCallbackResponse>());
 
