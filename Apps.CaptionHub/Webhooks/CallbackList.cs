@@ -123,9 +123,9 @@ public class CallbackList
         if (input.CaptionSetId != null && payload.CaptionSet.CaptionSetId != input.CaptionSetId)
             return Task.FromResult(GetPreflightResponse<CaptionSetCallbackResponse>());
 
-        if (input.LanguageIds != null && input.LanguageIds.Any())
+        if (input.LanguageCodes != null && input.LanguageCodes.Any())
         {
-            if (!input.LanguageIds.Contains(payload.CaptionSet.Language.Code))
+            if (!input.LanguageCodes.Contains(payload.CaptionSet.Language.Code))
                 return Task.FromResult(GetPreflightResponse<CaptionSetCallbackResponse>());
         }
 

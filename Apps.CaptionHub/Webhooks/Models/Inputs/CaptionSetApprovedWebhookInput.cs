@@ -9,8 +9,8 @@ namespace Apps.CaptionHub.Webhooks.Models.Inputs
         [Display("Caption set ID")]
         public string? CaptionSetId { get; set; }
 
-        [Display("Language ID")]
-        [DataSource(typeof(LanguageIdDataHandler))]
-        public IEnumerable<string>? LanguageIds { get; set; }
+        [Display("Language codes")]
+        [DataSource(typeof(LanguageCodeDataHandler))]
+        public IEnumerable<string>? LanguageCodes { get; set; }
     }
 }
