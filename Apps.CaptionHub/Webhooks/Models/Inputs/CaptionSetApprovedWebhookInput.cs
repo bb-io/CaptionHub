@@ -8,7 +8,7 @@ namespace Apps.CaptionHub.Webhooks.Models.Inputs
     {
         [Display("Project")]
         [DataSource(typeof(ProjectDataHandler))]
-        public string? ProjectId { get; set; }
+        public string ProjectId { get; set; }
 
         [Display("Caption set ID")]
         public string? CaptionSetId { get; set; }
