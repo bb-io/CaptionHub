@@ -4,8 +4,12 @@ using Blackbird.Applications.Sdk.Common.Dynamic;
 
 namespace Apps.CaptionHub.Webhooks.Models.Inputs
 {
-    public class CaptionSetApprovedWebhookInput : ProjectWebhookInput
+    public class CaptionSetApprovedWebhookInput 
     {
+        [Display("Project")]
+        [DataSource(typeof(ProjectDataHandler))]
+        public string? ProjectId { get; set; }
+
         [Display("Caption set ID")]
         public string? CaptionSetId { get; set; }
 
