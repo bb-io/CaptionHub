@@ -9,7 +9,7 @@ using RestSharp;
 
 namespace Apps.CaptionHub.Actions;
 
-[ActionList]
+[ActionList("Termbases")]
 public class TermbaseActions : CaptionHubInvocable
 {
     public TermbaseActions(InvocationContext invocationContext) : base(invocationContext)

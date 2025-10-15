@@ -9,7 +9,7 @@ using RestSharp;
 
 namespace Apps.CaptionHub.Actions;
 
-[ActionList]
+[ActionList("Automations")]
 public class AutomationActions : CaptionHubInvocable
 {
     public AutomationActions(InvocationContext invocationContext)
