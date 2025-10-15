@@ -15,7 +15,7 @@ using RestSharp;
 
 namespace Apps.CaptionHub.Actions;
 
-[ActionList]
+[ActionList("Projects")]
 public class ProjectActions : CaptionHubInvocable
 {
     public ProjectActions(InvocationContext invocationContext) : base(invocationContext)

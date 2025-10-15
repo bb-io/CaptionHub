@@ -15,7 +15,7 @@ using Blackbird.Applications.Sdk.Common.Exceptions;
 
 namespace Apps.CaptionHub.Actions;
 
-[ActionList]
+[ActionList("Renders")]
 public class RenderActions : CaptionHubInvocable
 {
     private readonly IFileManagementClient _fileManagementClient;

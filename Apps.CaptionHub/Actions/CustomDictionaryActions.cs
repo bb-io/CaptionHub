@@ -11,7 +11,7 @@ using RestSharp;
 
 namespace Apps.CaptionHub.Actions;
 
-[ActionList]
+[ActionList("Custom dictionaries")]
 public class CustomDictionaryActions : CaptionHubInvocable
 {
     public CustomDictionaryActions(InvocationContext invocationContext) : base(invocationContext)

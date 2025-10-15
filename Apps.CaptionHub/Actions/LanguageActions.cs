@@ -9,6 +9,7 @@ using RestSharp;
 
 namespace Apps.CaptionHub.Actions;
 
+[ActionList("Languages")]
 public class LanguageActions : CaptionHubInvocable
 {
     public LanguageActions(InvocationContext invocationContext) : base(invocationContext)

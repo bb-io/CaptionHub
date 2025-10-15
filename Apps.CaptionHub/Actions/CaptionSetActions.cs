@@ -19,7 +19,7 @@ using Apps.CaptionHub.Models.Request.Project;
 
 namespace Apps.CaptionHub.Actions;
 
-[ActionList]
+[ActionList("Caption sets")]
 public class CaptionSetActions : CaptionHubInvocable
 {
     private readonly IFileManagementClient _fileManagementClient;

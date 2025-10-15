@@ -9,6 +9,7 @@ using RestSharp;
 
 namespace Apps.CaptionHub.Actions;
 
+[ActionList("Teams")]
 public class TeamActions : CaptionHubInvocable
 {
     public TeamActions(InvocationContext invocationContext) : base(invocationContext)
