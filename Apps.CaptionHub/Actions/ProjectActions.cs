@@ -23,19 +23,10 @@ public class ProjectActions : CaptionHubInvocable
     }
 
     [Action("Search projects", Description = "Search projects")]
-    public async Task<ListProjectsResponse> SearchProjects([ActionParameter] SearchProjectsRequest input)
+    public async Task<SearchProjectsResponse> SearchProjects([ActionParameter] SearchProjectsRequest input)
     {
-        var endpoint = ApiEndpoints.Projects.WithQuery(input);
-        var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
-
         var folderSlugs = await GetFolderSlugsAsync(input);
-
-        foreach (var folderSlug in folderSlugs)
-        {
-            request.AddQueryParameter("folder_slug", folderSlug);
-        }
-
-        var response = await Client.Paginate<ProjectEntity>(request);
+        var response = await SearchProjectsAsync(input, folderSlugs);
         return new(response);
     }
 
@@ -114,6 +105,34 @@ public class ProjectActions : CaptionHubInvocable
         }
 
         return result;
+    }
+
+    private async Task<List<ProjectEntity>> SearchProjectsAsync(SearchProjectsRequest input, IEnumerable<string> folderSlugs)
+    {
+        var selectedFolderSlugs = folderSlugs.Distinct().ToList();
+
+        if (!selectedFolderSlugs.Any())
+        {
+            var endpoint = ApiEndpoints.Projects.WithQuery(input);
+            var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
+            return await Client.Paginate<ProjectEntity>(request);
+        }
+
+        var projects = new Dictionary<string, ProjectEntity>();
+
+        foreach (var folderSlug in selectedFolderSlugs)
+        {
+            var endpoint = ApiEndpoints.Projects.WithQuery(input).SetQueryParameter("folder_slug", folderSlug);
+            var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
+            var response = await Client.Paginate<ProjectEntity>(request);
+
+            foreach (var project in response)
+            {
+                projects[project.Id] = project;
+            }
+        }
+
+        return projects.Values.ToList();
     }
 
     [Action("Create project", Description = "Create a new project")]
