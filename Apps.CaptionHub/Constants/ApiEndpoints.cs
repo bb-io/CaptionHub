@@ -7,6 +7,7 @@ public static class ApiEndpoints
     public const string CaptionSets = "/caption_sets";
     public const string Languages = "/languages";
     public const string Formats = "/formats";
+    public const string Folders = "/folders";
     public const string Projects = "/projects";
     public const string Teams = "/teams";
     public const string Termbases = "/termbases";

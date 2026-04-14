@@ -22,13 +22,93 @@ public class ProjectActions : CaptionHubInvocable
     {
     }
 
-    [Action("List projects", Description = "List all projects")]
-    public async Task<ListProjectsResponse> ListProjects()
+    [Action("Search projects", Description = "Search projects")]
+    public async Task<SearchProjectsResponse> SearchProjects([ActionParameter] SearchProjectsRequest input)
     {
-        var request = new CaptionHubRequest(ApiEndpoints.Projects, Method.Get, Creds);
+        var folderSlugs = (await GetFolderSlugsAsync(input)).Distinct().ToList();
+        var response = await SearchProjectsAsync(input, folderSlugs);
+        return new(response, folderSlugs, input.IncludeAllSubfolders);
+    }
 
-        var response = await Client.Paginate<ProjectEntity>(request);
-        return new(response);
+    private async Task<IEnumerable<string>> GetFolderSlugsAsync(SearchProjectsRequest input)
+    {
+        var selectedFolderSlugs = input.FolderSlug?.Distinct().ToList() ?? new List<string>();
+
+        if (!selectedFolderSlugs.Any() || input.IncludeAllSubfolders != true)
+        {
+            return selectedFolderSlugs;
+        }
+
+        var allSelectedSlugs = new HashSet<string>(selectedFolderSlugs);
+
+        foreach (var folderSlug in selectedFolderSlugs)
+        {
+            var descendantSlugs = await GetDescendantFolderSlugsAsync(folderSlug);
+            foreach (var descendantSlug in descendantSlugs)
+            {
+                allSelectedSlugs.Add(descendantSlug);
+            }
+        }
+
+        return allSelectedSlugs;
+    }
+
+    private async Task<List<string>> GetDescendantFolderSlugsAsync(string parentFolderIdOrSlug)
+    {
+        var result = new List<string>();
+        var queue = new Queue<string>();
+        queue.Enqueue(parentFolderIdOrSlug);
+
+        while (queue.Count > 0)
+        {
+            var parentFolderId = queue.Dequeue();
+            var endpoint = ApiEndpoints.Folders.SetQueryParameter("parent_folder_id", parentFolderId);
+            var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
+            var folders = await Client.ExecuteWithErrorHandling<FolderEntity[]>(request);
+
+            foreach (var folder in folders)
+            {
+                if (result.Contains(folder.Slug))
+                    continue;
+
+                result.Add(folder.Slug);
+
+                if (folder.ChildrenCount > 0)
+                {
+                    queue.Enqueue(folder.Id.ToString());
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private async Task<List<ProjectEntity>> SearchProjectsAsync(SearchProjectsRequest input, IEnumerable<string> folderSlugs)
+    {
+        var selectedFolderSlugs = folderSlugs.Distinct().ToList();
+
+        if (!selectedFolderSlugs.Any())
+        {
+            var endpoint = ApiEndpoints.Projects.WithQuery(input);
+            var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
+            return await Client.Paginate<ProjectEntity>(request);
+        }
+
+        var projects = new Dictionary<string, ProjectEntity>();
+
+        foreach (var folderSlug in selectedFolderSlugs)
+        {
+            var endpoint = ApiEndpoints.Projects.WithQuery(input).SetQueryParameter("folder_slug", folderSlug);
+            var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
+            var response = await Client.Paginate<ProjectEntity>(request);
+
+            foreach (var project in response)
+            {
+                projects[project.Id] = project;
+            }
+        }
+
+        return projects.Values.ToList();
     }
 
     [Action("Create project", Description = "Create a new project")]

@@ -70,6 +70,18 @@ namespace Tests.CaptionHub
         }
 
         [TestMethod]
+        public async Task SearchProjectі_ReturnSucces()
+        {
+            var action = new ProjectActions(InvocationContext);
+            var createProjectRequest = new SearchProjectsRequest { IncludeAllSubfolders = false, 
+            FolderSlug= new [] {"48d2c94ad12e"}};
+            var response = await action.SearchProjects(createProjectRequest);
+            Console.WriteLine(response.Projects.Count());
+            Console.WriteLine(Newtonsoft.Json.JsonConvert.SerializeObject(response));
+            Assert.IsNotNull(response);
+        }
+
+        [TestMethod]
         public async Task MakeCaptionSetClaimable_ReturnSucces()
         {
             var action = new CaptionSetActions(InvocationContext,FileManager);

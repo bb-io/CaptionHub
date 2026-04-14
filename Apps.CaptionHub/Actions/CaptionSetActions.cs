@@ -126,6 +126,10 @@ public class CaptionSetActions : CaptionHubInvocable
     public async Task<FileResponse> DownloadOriginalCaptions(
         [ActionParameter] DownloadOriginalCaptionSetRequest input)
     {
+        var projectEndpoint = $"{ApiEndpoints.Projects}/{input.ProjectId}";
+        var projectRequest = new CaptionHubRequest(projectEndpoint, Method.Get, Creds);
+        var project = await Client.ExecuteWithErrorHandling<ProjectEntityWithCaptionSets>(projectRequest);
+
         var endpoint = $"{ApiEndpoints.CaptionSets}/original".WithQuery(input);
         var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
 
@@ -135,7 +139,8 @@ public class CaptionSetActions : CaptionHubInvocable
 
         return new()
         {
-            File = file
+            File = file,
+            CaptionSetId = project.OriginalCaptionSet?.Id
         };
     }
 
