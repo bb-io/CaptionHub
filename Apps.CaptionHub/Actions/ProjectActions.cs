@@ -22,13 +22,98 @@ public class ProjectActions : CaptionHubInvocable
     {
     }
 
-    [Action("List projects", Description = "List all projects")]
-    public async Task<ListProjectsResponse> ListProjects()
+    [Action("Search projects", Description = "Search projects")]
+    public async Task<ListProjectsResponse> SearchProjects([ActionParameter] SearchProjectsRequest input)
     {
-        var request = new CaptionHubRequest(ApiEndpoints.Projects, Method.Get, Creds);
+        var endpoint = ApiEndpoints.Projects.WithQuery(input);
+        var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
+
+        var folderSlugs = await GetFolderSlugsAsync(input);
+
+        foreach (var folderSlug in folderSlugs)
+        {
+            request.AddQueryParameter("folder_slug", folderSlug);
+        }
 
         var response = await Client.Paginate<ProjectEntity>(request);
         return new(response);
+    }
+
+    private async Task<IEnumerable<string>> GetFolderSlugsAsync(SearchProjectsRequest input)
+    {
+        var selectedFolderSlugs = input.FolderSlugs?.Distinct().ToList() ?? new List<string>();
+
+        if (!selectedFolderSlugs.Any() || !input.IncludeAllSubfolders)
+        {
+            return selectedFolderSlugs;
+        }
+
+        var allFolders = await GetAllFoldersAsync();
+        var selectedFolders = allFolders
+            .Where(x => selectedFolderSlugs.Contains(x.Slug))
+            .ToList();
+
+        var foldersByParentId = allFolders
+            .Where(x => x.ParentFolderId.HasValue)
+            .GroupBy(x => x.ParentFolderId!.Value)
+            .ToDictionary(x => x.Key, x => x.ToList());
+
+        var allSelectedSlugs = new HashSet<string>(selectedFolderSlugs);
+        var queue = new Queue<FolderEntity>(selectedFolders);
+
+        while (queue.Count > 0)
+        {
+            var folder = queue.Dequeue();
+
+            if (!foldersByParentId.TryGetValue(folder.Id, out var children))
+                continue;
+
+            foreach (var child in children)
+            {
+                if (allSelectedSlugs.Add(child.Slug))
+                {
+                    queue.Enqueue(child);
+                }
+            }
+        }
+
+        return allSelectedSlugs;
+    }
+
+    private async Task<List<FolderEntity>> GetAllFoldersAsync()
+    {
+        var result = new List<FolderEntity>();
+        var queue = new Queue<int?>();
+        queue.Enqueue(null);
+
+        while (queue.Count > 0)
+        {
+            var parentFolderId = queue.Dequeue();
+            var endpoint = ApiEndpoints.Folders;
+
+            if (parentFolderId.HasValue)
+            {
+                endpoint = endpoint.SetQueryParameter("parent_folder_id", parentFolderId.Value.ToString());
+            }
+
+            var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
+            var folders = await Client.ExecuteWithErrorHandling<FolderEntity[]>(request);
+
+            foreach (var folder in folders)
+            {
+                if (result.Any(x => x.Id == folder.Id))
+                    continue;
+
+                result.Add(folder);
+
+                if (folder.ChildrenCount > 0)
+                {
+                    queue.Enqueue(folder.Id);
+                }
+            }
+        }
+
+        return result;
     }
 
     [Action("Create project", Description = "Create a new project")]
