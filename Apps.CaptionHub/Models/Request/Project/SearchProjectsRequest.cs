@@ -33,7 +33,7 @@ public class SearchProjectsRequest
 
     [Display("Include all subfolders")]
     [JsonIgnore]
-    public bool IncludeAllSubfolders { get; set; }
+    public bool? IncludeAllSubfolders { get; set; }
 
     [Display("Original language")]
     [JsonProperty("original_language")]

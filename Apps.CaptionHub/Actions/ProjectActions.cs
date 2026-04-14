@@ -43,7 +43,7 @@ public class ProjectActions : CaptionHubInvocable
     {
         var selectedFolderSlugs = input.FolderSlugs?.Distinct().ToList() ?? new List<string>();
 
-        if (!selectedFolderSlugs.Any() || !input.IncludeAllSubfolders)
+        if (!selectedFolderSlugs.Any() || input.IncludeAllSubfolders != true)
         {
             return selectedFolderSlugs;
         }
