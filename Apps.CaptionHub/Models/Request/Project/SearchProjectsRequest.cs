@@ -29,7 +29,7 @@ public class SearchProjectsRequest
     [Display("Folder slug")]
     [DataSource(typeof(FolderDataHandler))]
     [JsonIgnore]
-    public IEnumerable<string>? FolderSlugs { get; set; }
+    public IEnumerable<string>? FolderSlug { get; set; }
 
     [Display("Include all subfolders")]
     [JsonIgnore]

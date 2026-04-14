@@ -356,3 +356,4 @@ healthchecksdb
 *.env
 /Tests.CaptionHub/appsettings.json
 /Tests.CaptionHub/appsettings.json
+/Tests.CaptionHub/appsettings.json

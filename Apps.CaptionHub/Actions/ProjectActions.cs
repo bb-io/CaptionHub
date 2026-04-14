@@ -25,81 +25,57 @@ public class ProjectActions : CaptionHubInvocable
     [Action("Search projects", Description = "Search projects")]
     public async Task<SearchProjectsResponse> SearchProjects([ActionParameter] SearchProjectsRequest input)
     {
-        var folderSlugs = await GetFolderSlugsAsync(input);
+        var folderSlugs = (await GetFolderSlugsAsync(input)).Distinct().ToList();
         var response = await SearchProjectsAsync(input, folderSlugs);
-        return new(response);
+        return new(response, folderSlugs, input.IncludeAllSubfolders);
     }
 
     private async Task<IEnumerable<string>> GetFolderSlugsAsync(SearchProjectsRequest input)
     {
-        var selectedFolderSlugs = input.FolderSlugs?.Distinct().ToList() ?? new List<string>();
+        var selectedFolderSlugs = input.FolderSlug?.Distinct().ToList() ?? new List<string>();
 
         if (!selectedFolderSlugs.Any() || input.IncludeAllSubfolders != true)
         {
             return selectedFolderSlugs;
         }
 
-        var allFolders = await GetAllFoldersAsync();
-        var selectedFolders = allFolders
-            .Where(x => selectedFolderSlugs.Contains(x.Slug))
-            .ToList();
-
-        var foldersByParentId = allFolders
-            .Where(x => x.ParentFolderId.HasValue)
-            .GroupBy(x => x.ParentFolderId!.Value)
-            .ToDictionary(x => x.Key, x => x.ToList());
-
         var allSelectedSlugs = new HashSet<string>(selectedFolderSlugs);
-        var queue = new Queue<FolderEntity>(selectedFolders);
 
-        while (queue.Count > 0)
+        foreach (var folderSlug in selectedFolderSlugs)
         {
-            var folder = queue.Dequeue();
-
-            if (!foldersByParentId.TryGetValue(folder.Id, out var children))
-                continue;
-
-            foreach (var child in children)
+            var descendantSlugs = await GetDescendantFolderSlugsAsync(folderSlug);
+            foreach (var descendantSlug in descendantSlugs)
             {
-                if (allSelectedSlugs.Add(child.Slug))
-                {
-                    queue.Enqueue(child);
-                }
+                allSelectedSlugs.Add(descendantSlug);
             }
         }
 
         return allSelectedSlugs;
     }
 
-    private async Task<List<FolderEntity>> GetAllFoldersAsync()
+    private async Task<List<string>> GetDescendantFolderSlugsAsync(string parentFolderIdOrSlug)
     {
-        var result = new List<FolderEntity>();
-        var queue = new Queue<int?>();
-        queue.Enqueue(null);
+        var result = new List<string>();
+        var queue = new Queue<string>();
+        queue.Enqueue(parentFolderIdOrSlug);
 
         while (queue.Count > 0)
         {
             var parentFolderId = queue.Dequeue();
-            var endpoint = ApiEndpoints.Folders;
-
-            if (parentFolderId.HasValue)
-            {
-                endpoint = endpoint.SetQueryParameter("parent_folder_id", parentFolderId.Value.ToString());
-            }
-
+            var endpoint = ApiEndpoints.Folders.SetQueryParameter("parent_folder_id", parentFolderId);
             var request = new CaptionHubRequest(endpoint, Method.Get, Creds);
             var folders = await Client.ExecuteWithErrorHandling<FolderEntity[]>(request);
 
             foreach (var folder in folders)
             {
-                if (result.Any(x => x.Id == folder.Id))
+                if (result.Contains(folder.Slug))
                     continue;
 
-                result.Add(folder);
+                result.Add(folder.Slug);
 
                 if (folder.ChildrenCount > 0)
                 {
-                    queue.Enqueue(folder.Id);
+                    queue.Enqueue(folder.Id.ToString());
                 }
             }
         }
